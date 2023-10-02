@@ -1,38 +1,41 @@
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MyTelegramBot extends TelegramLongPollingBot {
+    private Map<String, Command> commands = new HashMap<>();
+
+    public MyTelegramBot() {
+        // Регистрируем команды
+        commands.put("/help", new HelpCommand());
+        commands.put("/authors", new AuthorsCommand());
+        // Добавить другие команды по аналогии
+    }
+
     @Override
-    public void onUpdateReceived(Update update) {//Здесь всё что мы получаем от юзера при общении с ботом
-        //System.out.println(update.getMessage().getText());// Получаем сообщения которые вводят боту
-        //System.out.println(update.getMessage().getFrom().getFirstName());// Получаем ник того кто вводит
+    public void onUpdateReceived(Update update) {
+        String commandText = update.getMessage().getText();
+        Command command = commands.get(commandText);
 
-        String command = update.getMessage().getText();
-        if(command.equals("/help")){
-            String message = "Пока что команд нет";
-            SendMessage response = new SendMessage();
-            response.setChatId(update.getMessage().getChatId().toString());
-            response.setText(message);
-
-            try {
-                execute(response);
-            } catch (TelegramApiException E){
-                E.printStackTrace();
-            }
+        if (command != null) {
+            command.execute(update);
+        } else {
+            System.out.println("Неизвестная команда!");
         }
     }
 
     @Override
     public String getBotUsername() {
-        // TODO
-        return "CurrencyExchangerProjectBot";
+        // Укажите имя вашего бота
+        return "SportsTimetableBot";
     }
 
     @Override
     public String getBotToken() {
-        // TODO
-        return "6416187841:AAHmmO5gFJ_UERT5LNrQdxXb6dNJZaAKlts";
+        // Укажите токен вашего бота
+        return "6521790062:AAHBfHm6N_EZFjrZbkBTKejJZnPMmlwPsyk";
     }
+
 }
+
