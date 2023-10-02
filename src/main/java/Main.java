@@ -1,7 +1,6 @@
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-//First pull request
 public class Main {
     public static void main(String [] args){
         try {
@@ -12,4 +11,3 @@ public class Main {
         }
     }
 }
-//add comment in feautures
