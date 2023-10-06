@@ -5,7 +5,8 @@ import java.util.Map;
 
 public class MyTelegramBot extends TelegramLongPollingBot {
     private Map<String, Command> commands = new HashMap<>();
-
+    String nameBot = System.getenv("Telegram_Name");
+    String apiBot = System.getenv("Telegram_API");
     public MyTelegramBot() {
         // Регистрируем команды
         commands.put("/help", new HelpCommand());
@@ -17,24 +18,19 @@ public class MyTelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         String commandText = update.getMessage().getText();
         Command command = commands.get(commandText);
-
         if (command != null) {
             command.execute(update);
         } else {
             System.out.println("Неизвестная команда!");
         }
     }
-
     @Override
     public String getBotUsername() {
-        // Укажите имя вашего бота
-        return "SportsTimetableBot";
+        return nameBot;
     }
-
     @Override
     public String getBotToken() {
-        // Укажите токен вашего бота
-        return "6521790062:AAHBfHm6N_EZFjrZbkBTKejJZnPMmlwPsyk";
+        return apiBot;
     }
 
 }
