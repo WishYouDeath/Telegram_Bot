@@ -9,7 +9,6 @@ public class AuthorsCommand extends Command {
         message += "Егор\n";
         message += "Иван\n";
 
-
         SendMessage response = new SendMessage();
         response.setChatId(update.getMessage().getChatId().toString());
         response.setText(message);
