@@ -3,9 +3,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 public class SendMessageOperationCreate {
-    private final String greetingMessage = "Привет, я бот, который знает расписание игровых событий!";
     public SendMessage createGreetingInformation(Message message){ // start
-        return createSimpleMessage(message, greetingMessage);
+        return createSimpleMessage(message, "Привет, я бот, который знает расписание игровых событий!");
     }
     public SendMessage createAuthorsInformation(Message message){ // authors
         return createSimpleMessage(message, "Список авторов: \nЕгор,\nИван");
