@@ -1,7 +1,5 @@
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-
 public class SendMessageOperationCreate {
     public SendMessage createGreetingInformation(Message message){ // start
         return createSimpleMessage(message, "Привет, я бот, который знает расписание игровых событий!");

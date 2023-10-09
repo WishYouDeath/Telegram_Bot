@@ -3,28 +3,22 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
 import org.telegram.telegrambots.meta.api.objects.Message;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static constant.Commands.*;
-
 public class MyTelegramBot extends TelegramLongPollingBot {
     SendMessageOperationCreate sendMessageOperationCreate = new SendMessageOperationCreate();
-    private Map<String, Command> hashCommands = new HashMap<>();
-    String nameBot = System.getenv("Telegram_Name");
-    String apiBot = System.getenv("Telegram_API");
-    public MyTelegramBot() {
-        // Регистрируем команды
-        hashCommands.put("/help", new HelpCommand());
-        hashCommands.put("/authors", new AuthorsCommand());
-
-        // Добавить другие команды по аналогии
+    Map<String, Consumer<Message>> commandMap = new HashMap<>();
+    public void AddCommands(){
+        commandMap.put(START, message -> executeMessage(sendMessageOperationCreate.createGreetingInformation(message)));
+        commandMap.put(HELP, message -> executeMessage(sendMessageOperationCreate.createHelpInformation(message)));
+        commandMap.put(ABOUT, message -> executeMessage(sendMessageOperationCreate.createBotInformation(message)));
+        commandMap.put(AUTHORS, message -> executeMessage(sendMessageOperationCreate.createAuthorsInformation(message)));
     }
-
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()){
@@ -33,32 +27,20 @@ public class MyTelegramBot extends TelegramLongPollingBot {
     }
 
     private void handleMessage(Message message) {
+        AddCommands();
         if(message.hasText() && message.hasEntities()){
             Optional<MessageEntity> commandEntity =
                     message.getEntities().stream().filter(e -> "bot_command".equals(e.getType())).findFirst();
             //Если написали команду /start 123 то мы обрезаем 123 до команды /start и так с каждой командой
-            if(commandEntity.isPresent()){
+            if (commandEntity.isPresent()) {
                 String command = message.getText().substring(commandEntity.get().getOffset(), commandEntity.get().getLength());
-                switch (command) {
-                    case START:
-                        executeMessage(sendMessageOperationCreate.createGreetingInformation(message));
-                        break;
-                    case HELP:
-                        executeMessage(sendMessageOperationCreate.createHelpInformation(message));
-                        break;
-                    case ABOUT:
-                        executeMessage(sendMessageOperationCreate.createBotInformation(message));
-                        break;
-                    case AUTHORS:
-                        executeMessage(sendMessageOperationCreate.createAuthorsInformation(message));
-                        break;
-                    default:
-                        executeMessage(sendMessageOperationCreate.wrongCommand(message));
-                        break;
-                }
+                commandMap.getOrDefault(command, msg -> executeMessage(sendMessageOperationCreate.wrongCommand(message))).accept(message);
             }
         }
     }
+
+    String nameBot = System.getenv("Telegram_Name");
+    String apiBot = System.getenv("Telegram_API");
     @Override
     public String getBotUsername() {
         return nameBot;
@@ -67,7 +49,7 @@ public class MyTelegramBot extends TelegramLongPollingBot {
     public String getBotToken() {
         return apiBot;
     }
-     private <T extends BotApiMethod> void executeMessage(T sendMessage){
+    private <T extends BotApiMethod> void executeMessage(T sendMessage){
          try {
              execute(sendMessage);
          } catch (TelegramApiException e) {
