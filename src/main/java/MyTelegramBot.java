@@ -13,7 +13,7 @@ import static constant.Commands.*;
 public class MyTelegramBot extends TelegramLongPollingBot {
     SendMessageOperationCreate sendMessageOperationCreate = new SendMessageOperationCreate();
     Map<String, Consumer<Message>> commandMap = new HashMap<>();
-    public void AddCommands(){
+    public void addCommands(){
         commandMap.put(START, message -> executeMessage(sendMessageOperationCreate.createGreetingInformation(message)));
         commandMap.put(HELP, message -> executeMessage(sendMessageOperationCreate.createHelpInformation(message)));
         commandMap.put(ABOUT, message -> executeMessage(sendMessageOperationCreate.createBotInformation(message)));
@@ -27,7 +27,7 @@ public class MyTelegramBot extends TelegramLongPollingBot {
     }
 
     private void handleMessage(Message message) {
-        AddCommands();
+        addCommands();
         if(message.hasText() && message.hasEntities()){
             Optional<MessageEntity> commandEntity =
                     message.getEntities().stream().filter(e -> "bot_command".equals(e.getType())).findFirst();
