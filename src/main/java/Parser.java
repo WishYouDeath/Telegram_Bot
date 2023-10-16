@@ -8,10 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-//8c4ccd5f30mshce2422b42a4e78cp104c35jsnbf136edcfeee
 /*
 public class ApiRequest {
-    private static final String API_KEY = "8c4ccd5f30mshce2422b42a4e78cp104c35jsnbf136edcfeee";
+    private static final String API_KEY = "";
     public static String sendGetRequest(String urlString){
         try{
             URL url = new URL(urlString);
@@ -57,7 +56,7 @@ public class Parser {
                 URL url = new URL(urlString);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
-                connection.setRequestProperty("X-RapidAPI-Key", "8c4ccd5f30mshce2422b42a4e78cp104c35jsnbf136edcfeee");
+                connection.setRequestProperty("X-RapidAPI-Key", SITE_API);
 
                 // Получение и обработка ответа
                 int responseCode = connection.getResponseCode();
