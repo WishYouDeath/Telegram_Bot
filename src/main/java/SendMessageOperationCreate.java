@@ -2,8 +2,15 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 public class SendMessageOperationCreate {
     public SendMessage createGreetingInformation(Message message){ // start
+        Parser parsing = new Parser();
+        parsing.receiveData();
         return createSimpleMessage(message, "Привет, я бот, который знает расписание игровых событий!");
+
     }
+    /*public SendMessage createParseTime(Message message){ // start
+        String timetable =
+        return createSimpleMessage(message, timetable);
+    }*/
     public SendMessage createAuthorsInformation(Message message){ // authors
         return createSimpleMessage(message, "Список авторов: \nЕгор,\nИван");
     }
