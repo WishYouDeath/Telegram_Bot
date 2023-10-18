@@ -2,8 +2,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 public class SendMessageOperationCreate {
     public SendMessage createGreetingInformation(Message message){ // start
-        Parser parsing = new Parser();
-        parsing.receiveData();
         return createSimpleMessage(message, "Привет, я бот, который знает расписание игровых событий!");
 
     }
@@ -24,10 +22,15 @@ public class SendMessageOperationCreate {
     public SendMessage createBotInformation(Message message){ // about
         return createSimpleMessage(message, "Я умею показывать расписание игр и даже знаю результаты некоторых из них!");
     }
+    public SendMessage getTimeTable(Message message, String teamName) {
+        Parser parsing = new Parser();
+        String timetable = parsing.receiveData(teamName);
+        return createSimpleMessage(message, timetable);
+    }
     public SendMessage wrongCommand(Message message){
         return createSimpleMessage(message, "Неизвестная команда!\nПопробуйте найти нужную команду в /help");
     }
-    private SendMessage createSimpleMessage(Message message, String text){
+    public SendMessage createSimpleMessage(Message message, String text){
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(message.getChatId()));
         sendMessage.setText(text);
