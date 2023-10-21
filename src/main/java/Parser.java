@@ -9,8 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Parser {
-
-    private static final String SITE_API = "8c4ccd5f30mshce2422b42a4e78cp104c35jsnbf136edcfeee";
+    String SITE_API = System.getenv("SITE_API");
 
     public boolean isMatchFound(String homeTeamName, String awayTeamName, String teamName) {
         return (homeTeamName.equalsIgnoreCase(teamName) || awayTeamName.equalsIgnoreCase(teamName));
@@ -18,7 +17,7 @@ public class Parser {
 
     public String receiveData(String teamName) {
         try {
-            String data = "2023-10-17";
+            String data = "2023-10-21";
             String language = "ru";
             // Установка параметров запроса
             String urlString = "https://sportscore1.p.rapidapi.com/sports/1/events/date/" + data;
@@ -29,6 +28,7 @@ public class Parser {
 
             // Получение и обработка ответа
             int responseCode = connection.getResponseCode();
+
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 StringBuilder response = new StringBuilder();
@@ -81,14 +81,15 @@ public class Parser {
 
                     if (isMatchFound(homeTeamName, awayTeamName, teamName) && (status.equalsIgnoreCase("finished"))) {
                         matchFound = true;
-
                         result.append("Матч в лиге: '").append(leagueName).append("' завершился\n");
                         result.append(homeTeamName).append('\t').append(scoreHome).append(":").append(scoreAway).append('\t').append(awayTeamName).append("\n");
                         result.append("Матч был в это время: ").append(newStartTime).append("\n");
+                        break;
                     } else if (isMatchFound(homeTeamName, awayTeamName, teamName) && (status.equalsIgnoreCase("notstarted"))){
                         matchFound = true;
                         result.append("Матч в лиге: '").append(leagueName).append("' ещё не начался\n");
                         result.append("Матч '").append(homeTeamName).append(" - ").append(awayTeamName).append("' будет в это время: ").append(newStartTime).append("\n");
+                        break;
                     } else if (isMatchFound(homeTeamName,awayTeamName,teamName) && (status.equalsIgnoreCase("inprogress"))){
                         matchFound = true;
                         String currentPeriod = matchObject.getString("status_more");
@@ -104,8 +105,10 @@ public class Parser {
                 }
                 if (!matchFound) {
                     result.append("Такого матча сегодня нет");
+                    return result.toString();
                 }
-
+                System.out.println(result);
+                //System.out.println(teamName);
                 return result.toString(); // Возвращаем информацию как строку
             } else {
                 return "Ошибка в запросе: " + responseCode;
