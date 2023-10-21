@@ -4,15 +4,51 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpHeaders;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 
 public class Parser {
     String SITE_API = System.getenv("SITE_API");
+    public String getDate(JSONObject matchObject) {
+        String startTime = matchObject.getString("start_at");
+        try {
+            DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime startDateTime = LocalDateTime.parse(startTime, inputFormatter);
+            LocalDateTime adjustedDateTime = startDateTime.plusHours(5);
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("dd.MM HH:mm");
+            return adjustedDateTime.format(outputFormatter);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // или другой вариант обработки ошибки
+        }
+    }
+    public int matchNumber (JSONArray matchesArray, String teamName, String language) {
+        for (int i = 0; i < matchesArray.length(); i++) {
+            JSONObject matchObject = matchesArray.getJSONObject(i); //Перебираем в цикле каждый матч
+            JSONObject homeTeamObject = matchObject.getJSONObject("home_team");
+            JSONObject homeTeamNameTranslations = homeTeamObject.getJSONObject("name_translations");
+            String homeTeamName = homeTeamNameTranslations != null ? homeTeamNameTranslations.optString(language) : homeTeamObject.optString("home_team");
 
-    public boolean isMatchFound(String homeTeamName, String awayTeamName, String teamName) {
-        return (homeTeamName.equalsIgnoreCase(teamName) || awayTeamName.equalsIgnoreCase(teamName));
+            JSONObject awayTeamObject = matchObject.getJSONObject("away_team");
+            JSONObject awayTeamNameTranslations = awayTeamObject.getJSONObject("name_translations");
+            String awayTeamName = awayTeamNameTranslations != null ? awayTeamNameTranslations.optString(language) : awayTeamObject.optString("away_team");
+            if(homeTeamName.equalsIgnoreCase(teamName) || awayTeamName.equalsIgnoreCase(teamName)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public String receiveData(String teamName) {
@@ -21,6 +57,23 @@ public class Parser {
             String language = "ru";
             // Установка параметров запроса
             String urlString = "https://sportscore1.p.rapidapi.com/sports/1/events/date/" + data;
+            /*
+            HttpClient client = HttpClient.newBuilder()
+                    .connectTimeout(Duration.ofSeconds(10))
+                    .build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(urlString))
+                    .header("X-RapidAPI-Key", SITE_API)
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            int responseCode = response.statusCode();
+            String responseBody = response.body();
+
+            if (responseCode == 200) {
+                JSONObject jsonObject = new JSONObject(responseBody);
+                JSONArray matchesArray = jsonObject.getJSONArray("data");*/
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
@@ -41,13 +94,18 @@ public class Parser {
                 // Обработка JSON-ответа
                 JSONObject jsonObject = new JSONObject(response.toString());
                 JSONArray matchesArray = jsonObject.getJSONArray("data");
-                boolean matchFound = false;
 
                 // Поиск и формирование информации о конкретном матче
                 StringBuilder result = new StringBuilder(); // Создаем StringBuilder для сбора информации о матчах
 
-                for (int i = 0; i < matchesArray.length(); i++) {
-                    JSONObject matchObject = matchesArray.getJSONObject(i); //Перебираем в цикле каждый матч
+                int numberOfTheMatch = matchNumber (matchesArray,teamName,language);
+                if (numberOfTheMatch == -1) {
+                    result.append("Такого матча сегодня нет");
+                    return result.toString();
+                }
+                else{
+                    JSONObject matchObject = matchesArray.getJSONObject(numberOfTheMatch); //Перебираем в цикле каждый матч
+
                     JSONObject leagueObject = matchObject.getJSONObject("league");
                     JSONObject leagueTranslations = leagueObject.getJSONObject("name_translations");
                     String leagueName = leagueTranslations != null ? leagueTranslations.optString(language) : leagueTranslations.optString("name_translations");
@@ -67,49 +125,25 @@ public class Parser {
                     JSONObject scoreAwayTeam = matchObject.optJSONObject("away_score");
                     int scoreAway = scoreAwayTeam != null ? scoreAwayTeam.optInt("current", 0) : 0;
 
-                    //Устанавливаем имя матча
-                    // String teamName = "Россия";
+                    String newStartTime = getDate(matchObject);
 
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String startTime = matchObject.getString("start_at");
-                    Calendar cal = Calendar.getInstance();
-                    Date date = format.parse(startTime);
-                    cal.setTime(date);
-                    cal.add(Calendar.HOUR_OF_DAY, 5);
-                    date = cal.getTime();
-                    String newStartTime = format.format(date);
-
-                    if (isMatchFound(homeTeamName, awayTeamName, teamName) && (status.equalsIgnoreCase("finished"))) {
-                        matchFound = true;
+                    if (status.equalsIgnoreCase("finished")) {
                         result.append("Матч в лиге: '").append(leagueName).append("' завершился\n");
                         result.append(homeTeamName).append('\t').append(scoreHome).append(":").append(scoreAway).append('\t').append(awayTeamName).append("\n");
                         result.append("Матч был в это время: ").append(newStartTime).append("\n");
-                        break;
-                    } else if (isMatchFound(homeTeamName, awayTeamName, teamName) && (status.equalsIgnoreCase("notstarted"))){
-                        matchFound = true;
+                    } else if ((status.equalsIgnoreCase("notstarted"))){
                         result.append("Матч в лиге: '").append(leagueName).append("' ещё не начался\n");
                         result.append("Матч '").append(homeTeamName).append(" - ").append(awayTeamName).append("' будет в это время: ").append(newStartTime).append("\n");
-                        break;
-                    } else if (isMatchFound(homeTeamName,awayTeamName,teamName) && (status.equalsIgnoreCase("inprogress"))){
-                        matchFound = true;
+                    } else if ((status.equalsIgnoreCase("inprogress"))){
                         String currentPeriod = matchObject.getString("status_more");
-                        result.append("Матч ").append(homeTeamName).append(" - ").append(awayTeamName).append(" в лиге: '").append(leagueName).append("уже начался");
+                        result.append("Матч ").append(homeTeamName).append(" - ").append(awayTeamName).append(" в лиге: '").append(leagueName).append("' уже начался");
                         result.append("Идёт ").append(currentPeriod).append(" период");
                         result.append("Текущий счёт ").append(scoreHome).append(":").append(scoreAway);
-                        break;
-                    } else if (isMatchFound(homeTeamName, awayTeamName, teamName) && (status.equalsIgnoreCase("postponed"))){
-                        matchFound = true;
+                    } else if ((status.equalsIgnoreCase("postponed"))){
                         result.append("Матч между ").append(homeTeamName).append(" и ").append(awayTeamName).append(" в лиге: '").append(leagueName).append("' был отложен\n");
-                        break;
                     }
+                    return result.toString(); // Возвращаем информацию как строку
                 }
-                if (!matchFound) {
-                    result.append("Такого матча сегодня нет");
-                    return result.toString();
-                }
-                System.out.println(result);
-                //System.out.println(teamName);
-                return result.toString(); // Возвращаем информацию как строку
             } else {
                 return "Ошибка в запросе: " + responseCode;
             }

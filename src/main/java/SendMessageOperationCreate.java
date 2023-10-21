@@ -5,10 +5,6 @@ public class SendMessageOperationCreate {
         return createSimpleMessage(message, "Привет, я бот, который знает расписание игровых событий!");
 
     }
-    /*public SendMessage createParseTime(Message message){ // start
-        String timetable =
-        return createSimpleMessage(message, timetable);
-    }*/
     public SendMessage createAuthorsInformation(Message message){ // authors
         return createSimpleMessage(message, "Список авторов: \nЕгор,\nИван");
     }
