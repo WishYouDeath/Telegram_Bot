@@ -8,20 +8,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static constant.Commands.*;
 import constant.DialogState;
 public class MyTelegramBot extends TelegramLongPollingBot {
     SendMessageOperationCreate sendMessageOperationCreate = new SendMessageOperationCreate();
     Map<String, Consumer<Message>> commandMap = new HashMap<>();
-    private Map<Long, DialogState> dialogStateMap = new HashMap<>();
+    private final Map<Long, DialogState> dialogStateMap = new HashMap<>();
     public void addCommands(){
         commandMap.put(START, message -> executeMessage(sendMessageOperationCreate.createGreetingInformation(message)));
         commandMap.put(HELP, message -> executeMessage(sendMessageOperationCreate.createHelpInformation(message)));
         commandMap.put(ABOUT, message -> executeMessage(sendMessageOperationCreate.createBotInformation(message)));
         commandMap.put(AUTHORS, message -> executeMessage(sendMessageOperationCreate.createAuthorsInformation(message)));
-        commandMap.put(GET, message -> handleGetCommand(message));
+        commandMap.put(GET, this::handleGetCommand);
     }
+    MyTelegramBot(){
+        addCommands();
+    };
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()){
@@ -29,7 +31,6 @@ public class MyTelegramBot extends TelegramLongPollingBot {
         }
     }
     private void handleMessage(Message message) {
-        addCommands();
         if (dialogStateMap.containsKey(message.getChatId()) && dialogStateMap.get(message.getChatId()) == DialogState.WAITING_FOR_TEAM_NAME) {
             handleGetCommand(message);
         }
@@ -54,7 +55,6 @@ public class MyTelegramBot extends TelegramLongPollingBot {
     private void handleGetCommand(Message message) {
         if (message.hasText()) {
             String teamName = message.getText();
-            Parser parser = new Parser();
             executeMessage(sendMessageOperationCreate.getTimeTable(message, teamName));
             dialogStateMap.remove(message.getChatId()); // Удаляем состояние диалога после завершения запроса
         } else {

@@ -1,51 +1,76 @@
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
+
 public class Parser {
-    private static Map<String, String> cache = new HashMap<>();
+    public static Map<String, String> cache = new HashMap<>();
     private static final Logger logger = LogManager.getLogger(Parser.class);
-    public String receiveData(String teamName) {
-        if (cache.containsKey(teamName)) {
-            return cache.get(teamName);
+    public static boolean isTeamMatch(String teamName, JsonNode matchNode) {
+        JsonNode homeTeamNode = matchNode.get("home_team");
+        JsonNode awayTeamNode = matchNode.get("away_team");
+        if (isTeamNameMatch(teamName, homeTeamNode, "ru") || isTeamNameMatch(teamName, awayTeamNode, "ru")) {
+            return true;
         }
+        return isTeamNameMatch(teamName, homeTeamNode, "en") || isTeamNameMatch(teamName, awayTeamNode, "en");
+    }
+
+    public static boolean isTeamNameMatch(String teamName, JsonNode teamNode, String language) {
+        if (teamNode != null && teamNode.has("name_translations") && teamNode.get("name_translations").has(language)) {
+            String translatedName = teamNode.get("name_translations").get(language).asText();
+            return translatedName.equalsIgnoreCase(teamName);
+        }
+        return false;
+    }
+
+    public String receiveData(String teamName) {
+        if (cache.containsKey(teamName.toLowerCase())) {
+            return cache.get(teamName.toLowerCase());
+        }
+
         try {
-            String language = "ru";
             String baseUrl = "https://sportscore1.p.rapidapi.com/sports/1/events/date/";
-            String data = "2023-10-21";
+            String data = "2023-10-26";
             String urlString = baseUrl + data;
+
             String responseBody = APIRequest.sendGETRequest(urlString);
 
-            if (responseBody == null || responseBody.isEmpty()) {
-                return "Произошла ошибка при получении информации о матчах.";
+            if (responseBody.isEmpty()) {
+                logger.error("Произошла ошибка при обработке данных с сайта: получен пустой ответ");
+                throw new ExceptionHandler.EmptyResponseException("Произошла ошибка при обработке данных с сайта");
             }
 
-            JSONObject jsonObject = new JSONObject(responseBody);
-            JSONArray matchesArray = jsonObject.getJSONArray("data");
+            try {
+                StringBuilder matchInfoBuilder = new StringBuilder();
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode rootNode = objectMapper.readTree(responseBody);
+                JsonNode matchesNode = rootNode.get("data");
 
-            StringBuilder result = new StringBuilder();
-            int numberOfTheMatch = MatchParser.getMatchIndex(matchesArray, teamName, language);
-            if (numberOfTheMatch == -1) {
-                result.append("Такого матча сегодня нет");
-                cache.put(teamName, result.toString());
-                return result.toString();
-            } else {
-                JSONObject matchObject = matchesArray.getJSONObject(numberOfTheMatch);
-                String matchData = MatchParser.parseMatchData(matchObject, language);
-                result.append(matchData);
-                cache.put(teamName, result.toString());
-                return result.toString();
+                for (JsonNode matchNode : matchesNode) {
+                    if (isTeamMatch(teamName, matchNode)) {
+                        matchInfoBuilder.append(MatchDataUtil.processMatchData(matchNode));
+                        cache.put(teamName.toLowerCase(), matchInfoBuilder.toString());
+                        return matchInfoBuilder.toString();
+                    }
+                }
+
+                matchInfoBuilder.append("Такого матча сегодня нет");
+                cache.put(teamName.toLowerCase(), matchInfoBuilder.toString());
+                return matchInfoBuilder.toString();
+
+            } catch (JsonProcessingException e) {
+                logger.error("Произошла ошибка при обработке данных с сайта", e);
+                throw new ExceptionHandler.DataProcessingException("Произошла ошибка при обработке данных с сайта", e);
             }
+
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("An error occurred: {}", e.getMessage());
-            return "Произошла ошибка при получении информации о матчах.";
+            logger.error("Произошла ошибка при отправке HTTP-запроса", e);
+            throw new ExceptionHandler.HttpRequestException("Произошла ошибка при отправке HTTP-запроса", e);
         }
     }
 }
-
-
 
 

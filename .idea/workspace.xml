@@ -4,11 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a55c86f-2766-4149-93d4-71bc17456d33" name="Changes" comment="Стало читабельнее, но не сильно">
-      <change afterPath="$PROJECT_DIR$/src/main/java/APIRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/MatchParser.java" afterDir="false" />
+    <list default="true" id="9a55c86f-2766-4149-93d4-71bc17456d33" name="Changes" comment="Раскидал большой файл парсер на 3 отдельных файла со своими методами, подключил логгирование и кеширование">
+      <change afterPath="$PROJECT_DIR$/src/main/java/DateTimeUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/MatchDataUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/ParserTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/APIRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/APIRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/MatchParser.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/MyTelegramBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MyTelegramBot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Parser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -25,13 +30,14 @@
         <option value="Interface" />
         <option value="Enum" />
         <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Refactor" />
+        <entry key="$PROJECT_DIR$" value="refactor-2" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -59,31 +65,50 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
     "git-widget-placeholder": "task-1-2-1",
     "last_opened_file_path": "C:/Users/Yona/Desktop/Mine reprisitory",
-    "project.structure.last.edited": "Problems",
+    "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "configurable.group.language"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
     <key name="ExtractSuperBase.RECENT_KEYS">
       <recent name="" />
     </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="" />
+    </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.ParserTest">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="openjdk-21 (2)" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Mine reprisitory" />
+      <option name="PROGRAM_PARAMETERS" value="clean package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ParserTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Mine reprisitory" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="ParserTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.ParserTest" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
@@ -144,7 +169,21 @@
       <option name="project" value="LOCAL" />
       <updated>1697906640278</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Раскидал большой файл парсер на 3 отдельных файла со своими методами, подключил логгирование и кеширование">
+      <created>1697974260481</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1697974260481</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Раскидал большой файл парсер на 3 отдельных файла со своими методами, подключил логгирование и кеширование">
+      <created>1697974325505</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1697974325505</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -164,7 +203,8 @@
     <MESSAGE value="PRIMER" />
     <MESSAGE value="Работает по запросу user'a не сильно оптимизирован, сделали состояние диалгоа" />
     <MESSAGE value="Стало читабельнее, но не сильно" />
-    <option name="LAST_COMMIT_MESSAGE" value="Стало читабельнее, но не сильно" />
+    <MESSAGE value="Раскидал большой файл парсер на 3 отдельных файла со своими методами, подключил логгирование и кеширование" />
+    <option name="LAST_COMMIT_MESSAGE" value="Раскидал большой файл парсер на 3 отдельных файла со своими методами, подключил логгирование и кеширование" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
