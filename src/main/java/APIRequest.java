@@ -3,6 +3,7 @@ import java.net.URI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 public class APIRequest {
     private static final String API_KEY = System.getenv("SITE_API");
@@ -21,7 +22,7 @@ public class APIRequest {
         Response response = call.execute();
         logger.info("Sending request to API: {}", uri);
         if (response.code() == 200) {
-            return response.body().string();
+            return Objects.requireNonNull(response.body()).string();
         } else {
             logger.error("Error in request: {}", response);
             throw new Exception("Error in request: " + response);
