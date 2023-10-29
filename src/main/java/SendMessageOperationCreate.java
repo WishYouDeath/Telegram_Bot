@@ -13,7 +13,8 @@ public class SendMessageOperationCreate {
                 "/help - Выводит все существующие команды\n" +
                 "/about - Рассказывает об основных возможностях бота\n" +
                 "/authors - Показывает разработчиков бота\n" +
-                "/start - Приветствует пользователя\n");
+                "/start - Приветствует пользователя\n" +
+                "/get - Получить расписание");
     }
     public SendMessage createBotInformation(Message message){ // about
         return createSimpleMessage(message, "Я умею показывать расписание игр и даже знаю результаты некоторых из них!");

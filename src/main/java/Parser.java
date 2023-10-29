@@ -5,6 +5,8 @@ import java.util.HashMap;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
+import java.time.LocalDate;
+
 
 public class Parser {
     public static Map<String, String> cache = new HashMap<>();
@@ -33,7 +35,10 @@ public class Parser {
 
         try {
             String baseUrl = "https://sportscore1.p.rapidapi.com/sports/1/events/date/";
-            String data = "2023-10-26";
+            // Получение текущей даты
+            LocalDate currentDate = LocalDate.now();
+            // Преобразование даты в строку с форматом "yyyy-MM-dd"
+            String data = currentDate.toString();
             String urlString = baseUrl + data;
 
             String responseBody = APIRequest.sendGETRequest(urlString);
