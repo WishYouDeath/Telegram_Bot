@@ -1,7 +1,45 @@
 import com.fasterxml.jackson.databind.JsonNode;
-
+import JSON.*;
 import java.util.HashMap;
 import java.util.Map;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class MatchDataUtil {
+    public static String processMatchData(JsonNode matchNode) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Match match = objectMapper.convertValue(matchNode, Match.class);
+
+        // Получение информации о матче
+        String homeTeam = match.getHomeTeam().getName();
+        String awayTeam = match.getAwayTeam().getName();
+        String startAt = match.getStartAt();
+        String sport = match.getSport().getName();
+        String league = match.getLeague().getName();
+        Away_score awayScore = match.getAwayScore();
+        Home_score homeScore = match.getHomeScore();
+        String status = match.getStatus();
+
+        StringBuilder matchInfoBuilder = new StringBuilder();
+        matchInfoBuilder.append("Информация о матче:\n");
+        matchInfoBuilder.append("Домашняя команда: ").append(homeTeam).append("\n");
+        matchInfoBuilder.append("Гостевая команда: ").append(awayTeam).append("\n");
+        matchInfoBuilder.append("Дата начала: ").append(startAt).append("\n");
+        matchInfoBuilder.append("Вид спорта: ").append(sport).append("\n");
+        matchInfoBuilder.append("Лига: ").append(league).append("\n");
+        matchInfoBuilder.append("Счёт гостей: ").append(awayScore).append("\n");
+        matchInfoBuilder.append("Счёт домашней команды: ").append(homeScore).append("\n");
+        matchInfoBuilder.append("Статус: ").append(status).append("\n");
+
+        return matchInfoBuilder.toString();
+    }
+}
+
+/*
+
 public class MatchDataUtil {
     public static String processMatchData(JsonNode matchNode) {
         Map<String, String> periodMap = initializePeriodMap();
@@ -59,3 +97,4 @@ public class MatchDataUtil {
         return "Н/Д";
     }
 }
+*/

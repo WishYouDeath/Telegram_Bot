@@ -1,3 +1,5 @@
+import JSON.Home_team;
+import JSON.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,31 +9,34 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 import java.time.LocalDate;
 
-
 public class Parser {
-    public static Map<String, String> cache = new HashMap<>();
+    //public static Map<String, String> cache = new HashMap<>();
     private static final Logger logger = LogManager.getLogger(Parser.class);
-    public static boolean isTeamMatch(String teamName, JsonNode matchNode) {
-        JsonNode homeTeamNode = matchNode.get("home_team");
-        JsonNode awayTeamNode = matchNode.get("away_team");
-        if (isTeamNameMatch(teamName, homeTeamNode, "ru") || isTeamNameMatch(teamName, awayTeamNode, "ru")) {
+    public static boolean isTeamMatch(String teamName, Match match){
+        String homeTeam = match.getHomeTeam().getName();
+        String awayTeam = match.getAwayTeam().getName();
+        if (isTeamNameMatch(teamName, match, "ru", homeTeam, awayTeam)) {
             return true;
         }
-        return isTeamNameMatch(teamName, homeTeamNode, "en") || isTeamNameMatch(teamName, awayTeamNode, "en");
+        return isTeamNameMatch(teamName, match, "en", homeTeam, awayTeam);
     }
 
-    public static boolean isTeamNameMatch(String teamName, JsonNode teamNode, String language) {
-        if (teamNode != null && teamNode.has("name_translations") && teamNode.get("name_translations").has(language)) {
-            String translatedName = teamNode.get("name_translations").get(language).asText();
+    public static boolean isTeamNameMatch(String teamName, Match match, String language, String homeTeam, String awayTeam) {
+        if (homeTeam != null && match.getHomeTeam().getNameTranslations() != null && match.getHomeTeam().getNameTranslations().containsKey(language)) {
+            String translatedName = match.getHomeTeam().getNameTranslations().get(language);
+            return translatedName.equalsIgnoreCase(teamName);
+        }
+        if (awayTeam != null && match.getAwayTeam().getNameTranslations() != null && match.getAwayTeam().getNameTranslations().containsKey(language)) {
+            String translatedName = match.getAwayTeam().getNameTranslations().get(language);
             return translatedName.equalsIgnoreCase(teamName);
         }
         return false;
     }
 
     public String receiveData(String teamName) {
-        if (cache.containsKey(teamName.toLowerCase())) {
+        /*if (cache.containsKey(teamName.toLowerCase())) {
             return cache.get(teamName.toLowerCase());
-        }
+        }*/
 
         try {
             String baseUrl = "https://sportscore1.p.rapidapi.com/sports/1/events/date/";
@@ -51,19 +56,20 @@ public class Parser {
             try {
                 StringBuilder matchInfoBuilder = new StringBuilder();
                 ObjectMapper objectMapper = new ObjectMapper();
+                Match match = objectMapper.convertValue(responseBody, Match.class);
                 JsonNode rootNode = objectMapper.readTree(responseBody);
                 JsonNode matchesNode = rootNode.get("data");
 
                 for (JsonNode matchNode : matchesNode) {
-                    if (isTeamMatch(teamName, matchNode)) {
+                    if (isTeamMatch(teamName, match)) {
                         matchInfoBuilder.append(MatchDataUtil.processMatchData(matchNode));
-                        cache.put(teamName.toLowerCase(), matchInfoBuilder.toString());
+                        //cache.put(teamName.toLowerCase(), matchInfoBuilder.toString());
                         return matchInfoBuilder.toString();
                     }
                 }
 
                 matchInfoBuilder.append("Такого матча сегодня нет");
-                cache.put(teamName.toLowerCase(), matchInfoBuilder.toString());
+               // cache.put(teamName.toLowerCase(), matchInfoBuilder.toString());
                 return matchInfoBuilder.toString();
 
             } catch (JsonProcessingException e) {

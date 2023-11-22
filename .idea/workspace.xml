@@ -4,13 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a55c86f-2766-4149-93d4-71bc17456d33" name="Changes" comment="Раскидал большой файл парсер на 3 отдельных файла со своими методами, подключил логгирование и кеширование">
-      <change afterPath="$PROJECT_DIR$/src/main/java/DialogStateMachine.java" afterDir="false" />
+    <list default="true" id="9a55c86f-2766-4149-93d4-71bc17456d33" name="Changes" comment="Переписал парсер на Jackson написал юнит тест 2 методов в классе Parser. Добавил exception под каждую ситуацию, изменил логгирование">
+      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/Away_score.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/Away_team.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/Example.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/Home_score.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/Home_team.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/League.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/Match.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/Sport.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/MyTelegramBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MyTelegramBot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/MatchDataUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MatchDataUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SendMessageOperationCreate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SendMessageOperationCreate.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +39,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="refactor-2" />
+        <entry key="$PROJECT_DIR$" value="automat" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -75,6 +81,9 @@
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Yona\Desktop\Mine reprisitory\src\main\java" />
+    </key>
     <key name="ExtractSuperBase.RECENT_KEYS">
       <recent name="" />
     </key>
@@ -87,7 +96,7 @@
       <option name="ALTERNATIVE_JRE_PATH" value="openjdk-21 (2)" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="Main" />
-      <module name="TelegramBot" />
+      <module name="Mine reprisitory" />
       <option name="PROGRAM_PARAMETERS" value="clean package" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -104,8 +113,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.ParserTest" />
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
