@@ -7,23 +7,15 @@ import com.fasterxml.jackson.annotation.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "name",
-        "nameTranslations"
+        "nameTranslations",
 })
 @Generated("jsonschema2pojo")
-public class Sport{
-    @JsonProperty("name_translations")
-    private Map<String, String> nameTranslations;
+public class HomeTeam {
     @JsonProperty("name")
     private String name;
-    @JsonProperty("name")
-    public String getName() {
-        return name;
-    }
+    @JsonProperty("name_translations")
+    private Map<String, String> nameTranslations;
 
-    @JsonProperty("name")
-    public void setName(String name) {
-        this.name = name;
-    }
     @JsonProperty("name_translations")
     public Map<String, String> getNameTranslations() {
         return nameTranslations;
@@ -34,4 +26,13 @@ public class Sport{
         this.nameTranslations = nameTranslations;
     }
 
+    @JsonProperty("name")
+    public String getName() {
+        return name;
+    }
+
+    @JsonProperty("name")
+    public void setName(String name) {
+        this.name = name;
+    }
 }

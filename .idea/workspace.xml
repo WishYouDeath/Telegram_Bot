@@ -4,17 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a55c86f-2766-4149-93d4-71bc17456d33" name="Changes" comment="Переписал парсер на Jackson написал юнит тест 2 методов в классе Parser. Добавил exception под каждую ситуацию, изменил логгирование">
-      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/Away_score.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/Away_team.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/Example.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/Home_score.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/Home_team.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/League.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/Match.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/Sport.java" afterDir="false" />
+    <list default="true" id="9a55c86f-2766-4149-93d4-71bc17456d33" name="Changes" comment="Пока не работает ничего">
+      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/AwayScore.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/JSON/HomeScore.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/DateTimeUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/DateTimeUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/JSON/Away_score.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/JSON/Away_team.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/JSON/AwayTeam.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/JSON/Example.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/JSON/Example.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/JSON/Home_score.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/JSON/Home_team.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/JSON/HomeTeam.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/JSON/League.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/JSON/League.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/JSON/Match.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/JSON/Sport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/JSON/Sport.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/MatchDataUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MatchDataUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Parser.java" afterDir="false" />
     </list>
@@ -29,9 +32,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Enum" />
         <option value="JUnit5 Test Class" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -113,8 +116,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ParserTest" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.ParserTest" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
@@ -188,7 +191,14 @@
       <option name="project" value="LOCAL" />
       <updated>1697974325505</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Пока не работает ничего">
+      <created>1700677402864</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1700677402864</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -209,7 +219,8 @@
     <MESSAGE value="Работает по запросу user'a не сильно оптимизирован, сделали состояние диалгоа" />
     <MESSAGE value="Стало читабельнее, но не сильно" />
     <MESSAGE value="Раскидал большой файл парсер на 3 отдельных файла со своими методами, подключил логгирование и кеширование" />
-    <option name="LAST_COMMIT_MESSAGE" value="Раскидал большой файл парсер на 3 отдельных файла со своими методами, подключил логгирование и кеширование" />
+    <MESSAGE value="Пока не работает ничего" />
+    <option name="LAST_COMMIT_MESSAGE" value="Пока не работает ничего" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

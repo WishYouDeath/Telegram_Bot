@@ -1,34 +1,28 @@
-import JSON.Home_team;
 import JSON.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import java.util.HashMap;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Map;
+
+import java.time.Clock;
 import java.time.LocalDate;
 
 public class Parser {
     //public static Map<String, String> cache = new HashMap<>();
     private static final Logger logger = LogManager.getLogger(Parser.class);
-    public static boolean isTeamMatch(String teamName, Match match){
-        String homeTeam = match.getHomeTeam().getName();
-        String awayTeam = match.getAwayTeam().getName();
-        if (isTeamNameMatch(teamName, match, "ru", homeTeam, awayTeam)) {
-            return true;
-        }
-        return isTeamNameMatch(teamName, match, "en", homeTeam, awayTeam);
-    }
 
-    public static boolean isTeamNameMatch(String teamName, Match match, String language, String homeTeam, String awayTeam) {
-        if (homeTeam != null && match.getHomeTeam().getNameTranslations() != null && match.getHomeTeam().getNameTranslations().containsKey(language)) {
-            String translatedName = match.getHomeTeam().getNameTranslations().get(language);
-            return translatedName.equalsIgnoreCase(teamName);
-        }
-        if (awayTeam != null && match.getAwayTeam().getNameTranslations() != null && match.getAwayTeam().getNameTranslations().containsKey(language)) {
-            String translatedName = match.getAwayTeam().getNameTranslations().get(language);
-            return translatedName.equalsIgnoreCase(teamName);
+    public static boolean isTeamMatch(String teamName, Example match) {
+        return isTeamNameMatch(teamName, match.getHomeTeam(), match.getAwayTeam(), "ru") ||
+                isTeamNameMatch(teamName, match.getHomeTeam(), match.getAwayTeam(), "en");
+    }
+    public static boolean isTeamNameMatch(String teamName, HomeTeam homeTeam, AwayTeam awayTeam, String language) {
+        if ((homeTeam.getNameTranslations() != null && homeTeam.getNameTranslations().containsKey(language)) ||
+                (awayTeam.getNameTranslations() != null && awayTeam.getNameTranslations().containsKey(language))){
+            String translatedHomeName = homeTeam.getNameTranslations().get(language)!=null ? homeTeam.getNameTranslations().get(language): "";
+            String translatedAwayName = awayTeam.getNameTranslations().get(language)!=null ? awayTeam.getNameTranslations().get(language): "";
+
+            return (translatedAwayName.equalsIgnoreCase(teamName) || translatedHomeName.equalsIgnoreCase(teamName));
         }
         return false;
     }
@@ -40,8 +34,8 @@ public class Parser {
 
         try {
             String baseUrl = "https://sportscore1.p.rapidapi.com/sports/1/events/date/";
-            // Получение текущей даты
-            LocalDate currentDate = LocalDate.now();
+            //LocalDate currentDate = LocalDate.now() - наша дата UTC+5
+            LocalDate currentDate = LocalDate.now(Clock.systemUTC());// Получение даты сайта (-5 часов)
             // Преобразование даты в строку с форматом "yyyy-MM-dd"
             String data = currentDate.toString();
             String urlString = baseUrl + data;
@@ -56,18 +50,15 @@ public class Parser {
             try {
                 StringBuilder matchInfoBuilder = new StringBuilder();
                 ObjectMapper objectMapper = new ObjectMapper();
-                Match match = objectMapper.convertValue(responseBody, Match.class);
                 JsonNode rootNode = objectMapper.readTree(responseBody);
                 JsonNode matchesNode = rootNode.get("data");
-
                 for (JsonNode matchNode : matchesNode) {
+                    Example match = objectMapper.treeToValue(matchNode, Example.class);
                     if (isTeamMatch(teamName, match)) {
-                        matchInfoBuilder.append(MatchDataUtil.processMatchData(matchNode));
-                        //cache.put(teamName.toLowerCase(), matchInfoBuilder.toString());
+                        matchInfoBuilder.append(MatchDataUtil.processMatchData(match));
                         return matchInfoBuilder.toString();
                     }
                 }
-
                 matchInfoBuilder.append("Такого матча сегодня нет");
                // cache.put(teamName.toLowerCase(), matchInfoBuilder.toString());
                 return matchInfoBuilder.toString();
