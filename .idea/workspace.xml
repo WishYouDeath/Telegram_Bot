@@ -4,15 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a55c86f-2766-4149-93d4-71bc17456d33" name="Changes" comment="Переписал на JackSon, остались только тесты">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ButtonService.java" afterDir="false" />
+    <list default="true" id="9a55c86f-2766-4149-93d4-71bc17456d33" name="Changes" comment="Создал объект кнопок и применил их к help">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/MatchDataUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MatchDataUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/MyTelegramBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MyTelegramBot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Parser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/SendMessageOperationCreate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SendMessageOperationCreate.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/constant/Commands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constant/Commands.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/constant/DialogState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constant/DialogState.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +33,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="automat" />
+        <entry key="$PROJECT_DIR$" value="NewParser" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -198,7 +196,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701115801413</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Создал объект кнопок и применил их к help">
+      <created>1701704886355</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1701704886355</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -221,7 +226,8 @@
     <MESSAGE value="Раскидал большой файл парсер на 3 отдельных файла со своими методами, подключил логгирование и кеширование" />
     <MESSAGE value="Пока не работает ничего" />
     <MESSAGE value="Переписал на JackSon, остались только тесты" />
-    <option name="LAST_COMMIT_MESSAGE" value="Переписал на JackSon, остались только тесты" />
+    <MESSAGE value="Создал объект кнопок и применил их к help" />
+    <option name="LAST_COMMIT_MESSAGE" value="Создал объект кнопок и применил их к help" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

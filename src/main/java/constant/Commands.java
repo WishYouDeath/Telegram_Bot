@@ -1,6 +1,10 @@
 package constant;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Commands {
+    public static final String CATEGORY = "/category";
     public static final String START = "/start";
     public static final String HELP = "/help";
     public static final String ABOUT = "/about";

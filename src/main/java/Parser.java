@@ -15,6 +15,24 @@ public class Parser {
         return isTeamNameMatch(teamName, match.getHomeTeam(), match.getAwayTeam(), "ru") ||
                 isTeamNameMatch(teamName, match.getHomeTeam(), match.getAwayTeam(), "en");
     }
+    public int compareCategory(String category) {
+        switch (category.toLowerCase()) {
+            case "футбол":
+                return 1;
+            case "теннис":
+                return 2;
+            case "баскетбол":
+                return 3;
+            case "хоккей":
+                return 4;
+            case "волейбол":
+                return 5;
+            case "гандбол":
+                return 6;
+            default:
+                return 0;
+        }
+    }
     public static boolean isTeamNameMatch(String teamName, HomeTeam homeTeam, AwayTeam awayTeam, String language) {
         if ((homeTeam.getNameTranslations() != null && homeTeam.getNameTranslations().containsKey(language)) ||
                 (awayTeam.getNameTranslations() != null && awayTeam.getNameTranslations().containsKey(language))){
@@ -26,13 +44,13 @@ public class Parser {
         return false;
     }
 
-    public String receiveData(String teamName) {
+    public String receiveData(String teamName, String category) {
         /*if (cache.containsKey(teamName.toLowerCase())) {
             return cache.get(teamName.toLowerCase());
         }*/
-
+        int numberOfSport = compareCategory(category);
         try {
-            String baseUrl = "https://sportscore1.p.rapidapi.com/sports/1/events/date/";
+            String baseUrl = "https://sportscore1.p.rapidapi.com/sports/" +numberOfSport + "/events/date/";
             //LocalDate currentDate = LocalDate.now() - наша дата UTC+5
             LocalDate currentDate = LocalDate.now(Clock.systemUTC());// Получение даты сайта (-5 часов)
             // Преобразование даты в строку с форматом "yyyy-MM-dd"
@@ -54,7 +72,7 @@ public class Parser {
                 for (JsonNode matchNode : matchesNode) {
                     Example match = objectMapper.treeToValue(matchNode, Example.class);
                     if (isTeamMatch(teamName, match)) {
-                        matchInfoBuilder.append(MatchDataUtil.processMatchData(match));
+                        matchInfoBuilder.append(MatchDataUtil.processMatchData(match,category));
                         return matchInfoBuilder.toString();
                     }
                 }

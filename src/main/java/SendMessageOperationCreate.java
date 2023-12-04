@@ -2,6 +2,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
+import java.util.Map;
+
 import static constant.Commands.*;
 import static java.util.Arrays.asList;
 
@@ -20,18 +22,30 @@ public class SendMessageOperationCreate {
                 "/about - Рассказывает об основных возможностях бота\n" +
                 "/authors - Показывает разработчиков бота\n" +
                 "/start - Приветствует пользователя\n" +
-                "/get - Получить расписание спортивного матча");
+                "/get - Получить расписание спортивного матча\n" +
+                "/category - Выбрать категорию спорта");
         ReplyKeyboardMarkup keyboardMarkup =
-                buttonService.setButtons(buttonService.createButtons(asList(HELP,ABOUT,AUTHORS,START,GET)));
+                buttonService.setButtons(buttonService.createButtons(asList(HELP,ABOUT,AUTHORS,START,GET,CATEGORY)));
         returnedMessage.setReplyMarkup(keyboardMarkup);
         return returnedMessage;
     }
     public SendMessage createBotInformation(Message message){ // about
         return createSimpleMessage(message, "Я умею показывать расписание игр и даже знаю результаты некоторых из них!");
     }
-    public SendMessage getTimeTable(Message message, String teamName) {
+    public SendMessage createChooseCategoryMessage(Message message) {
+        SendMessage sendMessage = createSimpleMessage(message, "Выберите категорию:");
+        ReplyKeyboardMarkup keyboardMarkup =
+                buttonService.setButtons(buttonService.createButtons(asList("Футбол", "Теннис", "Баскетбол", "Хоккей", "Волейбол", "Гандбол")));
+        sendMessage.setReplyMarkup(keyboardMarkup);
+        return sendMessage;
+    }
+
+    public SendMessage getTimeTable(Message message, String teamName, Map<Long, String> userSelectedCategoryMap) {
         Parser parsing = new Parser();
-        String timetable = parsing.receiveData(teamName);
+        //String timetable = parsing.receiveData(teamName);
+        //String selectedDate = userSelectedDateMap.getOrDefault(message.getChatId(), "");
+        String category = userSelectedCategoryMap.get(message.getChatId());
+        String timetable = parsing.receiveData(teamName, category);
         return createSimpleMessage(message, timetable);
     }
     public SendMessage wrongCommand(Message message){
