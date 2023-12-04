@@ -44,21 +44,15 @@ public class Parser {
         return false;
     }
 
-    public String receiveData(String teamName, String category) {
-        /*if (cache.containsKey(teamName.toLowerCase())) {
-            return cache.get(teamName.toLowerCase());
-        }*/
+    public String receiveData(String teamName, String category, String date) {
         int numberOfSport = compareCategory(category);
         try {
             String baseUrl = "https://sportscore1.p.rapidapi.com/sports/" +numberOfSport + "/events/date/";
             //LocalDate currentDate = LocalDate.now() - наша дата UTC+5
-            LocalDate currentDate = LocalDate.now(Clock.systemUTC());// Получение даты сайта (-5 часов)
-            // Преобразование даты в строку с форматом "yyyy-MM-dd"
-            String data = currentDate.toString();
-            String urlString = baseUrl + data;
-
+            //LocalDate currentDate = LocalDate.now(Clock.systemUTC());// Получение даты сайта (-5 часов)
+            //String data = currentDate.toString(); // Преобразование даты в строку с форматом "yyyy-MM-dd"
+            String urlString = baseUrl + date;
             String responseBody = APIRequest.sendGETRequest(urlString);
-
             if (responseBody.isEmpty()) {
                 logger.error("Произошла ошибка при обработке данных с сайта: получен пустой ответ");
                 throw new ExceptionHandler.EmptyResponseException("Произошла ошибка при обработке данных с сайта");

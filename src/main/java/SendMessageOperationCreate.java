@@ -23,7 +23,8 @@ public class SendMessageOperationCreate {
                 "/authors - Показывает разработчиков бота\n" +
                 "/start - Приветствует пользователя\n" +
                 "/get - Получить расписание спортивного матча\n" +
-                "/category - Выбрать категорию спорта");
+                "/category - Установить спортивную категорию\n" +
+                "/date - Установить дату спортивного события");
         ReplyKeyboardMarkup keyboardMarkup =
                 buttonService.setButtons(buttonService.createButtons(asList(HELP,ABOUT,AUTHORS,START,GET,CATEGORY)));
         returnedMessage.setReplyMarkup(keyboardMarkup);
@@ -32,20 +33,27 @@ public class SendMessageOperationCreate {
     public SendMessage createBotInformation(Message message){ // about
         return createSimpleMessage(message, "Я умею показывать расписание игр и даже знаю результаты некоторых из них!");
     }
+    public SendMessage createChooseDateMessage(Message message) {
+        SendMessage sendMessage = createSimpleMessage(message, "Установите дату матча, который вы ищете\n" +
+                "Установка даты должна быть в формате UTC00, то есть -3 часа от Москвы");
+        ReplyKeyboardMarkup keyboardMarkup =
+                buttonService.setButtons(buttonService.createButtons(asList(TODAY,TOMORROW,YESTERDAY,OTHER_DATE)));
+        sendMessage.setReplyMarkup(keyboardMarkup);
+        return sendMessage;
+    }
     public SendMessage createChooseCategoryMessage(Message message) {
-        SendMessage sendMessage = createSimpleMessage(message, "Выберите категорию:");
+        SendMessage sendMessage = createSimpleMessage(message, "Установите категорию");
         ReplyKeyboardMarkup keyboardMarkup =
                 buttonService.setButtons(buttonService.createButtons(asList("Футбол", "Теннис", "Баскетбол", "Хоккей", "Волейбол", "Гандбол")));
         sendMessage.setReplyMarkup(keyboardMarkup);
         return sendMessage;
     }
 
-    public SendMessage getTimeTable(Message message, String teamName, Map<Long, String> userSelectedCategoryMap) {
+    public SendMessage getTimeTable(Message message, String teamName, Map<Long, String> userSelectedCategoryMap, Map<Long, String> userSelectedDateMap) {
         Parser parsing = new Parser();
-        //String timetable = parsing.receiveData(teamName);
-        //String selectedDate = userSelectedDateMap.getOrDefault(message.getChatId(), "");
+        String selectedDate = userSelectedDateMap.get(message.getChatId());
         String category = userSelectedCategoryMap.get(message.getChatId());
-        String timetable = parsing.receiveData(teamName, category);
+        String timetable = parsing.receiveData(teamName, category, selectedDate);
         return createSimpleMessage(message, timetable);
     }
     public SendMessage wrongCommand(Message message){
