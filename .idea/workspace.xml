@@ -7,9 +7,9 @@
     <list default="true" id="9a55c86f-2766-4149-93d4-71bc17456d33" name="Changes" comment="Добавил команду выбора категории + функционал к ней">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/MyTelegramBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MyTelegramBot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Parser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/SendMessageOperationCreate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SendMessageOperationCreate.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/constant/Commands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constant/Commands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/constant/DialogState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constant/DialogState.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,21 +55,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;automat&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Yona/Desktop/Mine reprisitory&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.language&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "git-widget-placeholder": "Keyboard",
+    "last_opened_file_path": "C:/Users/Yona/Desktop/Mine reprisitory",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "configurable.group.language"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
@@ -89,7 +89,7 @@
       <option name="ALTERNATIVE_JRE_PATH" value="openjdk-21 (2)" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="Main" />
-      <module name="Mine reprisitory" />
+      <module name="TelegramBot" />
       <option name="PROGRAM_PARAMETERS" value="clean package" />
       <method v="2">
         <option name="Make" enabled="true" />

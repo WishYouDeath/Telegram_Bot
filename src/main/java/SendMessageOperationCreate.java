@@ -41,6 +41,9 @@ public class SendMessageOperationCreate {
         sendMessage.setReplyMarkup(keyboardMarkup);
         return sendMessage;
     }
+    public SendMessage setNotification(Message message, String teamName) {
+        return createSimpleMessage(message, "Уведомление установлено для команды: " + teamName);
+    }
     public SendMessage createChooseCategoryMessage(Message message) {
         SendMessage sendMessage = createSimpleMessage(message, "Установите категорию");
         ReplyKeyboardMarkup keyboardMarkup =

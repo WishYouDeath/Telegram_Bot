@@ -28,6 +28,7 @@ public class MyTelegramBot extends TelegramLongPollingBot {
         commandMap.put(HELP, message -> executeMessage(sendMessageOperationCreate.createHelpInformation(message)));
         commandMap.put(ABOUT, message -> executeMessage(sendMessageOperationCreate.createBotInformation(message)));
         commandMap.put(AUTHORS, message -> executeMessage(sendMessageOperationCreate.createAuthorsInformation(message)));
+        commandMap.put(NOTIFICATION, this::handleGetNotificationCommand);
         commandMap.put(GET, this::handleGetCommand);
     }
 
@@ -78,7 +79,29 @@ public class MyTelegramBot extends TelegramLongPollingBot {
         else if (currentState == DialogState.CHOOSING_A_CATEGORY) {
             handleCategoryCommand(message);
         }
+        else if (currentState == DialogState.SETTING_NOTIFICATION_MATCH) {
+            handleSetNotificationMatch(message);
+        }
     }
+
+    private void handleGetNotificationCommand(Message message) {
+        dialogStateMachine.setDialogState(message.getChatId(), DialogState.SETTING_NOTIFICATION_MATCH);
+        executeMessage(sendMessageOperationCreate.createSimpleMessage(message,
+                "Введите название команды, для которой хотите установить уведомление"));
+    }
+    private void handleSetNotificationMatch(Message message) {
+        if (message.hasText()) {
+            String teamName = message.getText();
+            // можно костыльнуть сюда информацию о матче
+            executeMessage(sendMessageOperationCreate.createSimpleMessage(message,
+                    "Уведомление установлено для команды: " + teamName));
+            dialogStateMachine.clearDialogState(message.getChatId());
+        } else {
+            executeMessage(sendMessageOperationCreate.createSimpleMessage(message,
+                    "Пожалуйста, введите название команды для установки уведомления"));
+        }
+    }
+
     private void handleCategoryCommand(Message message) {
         if (message.hasText() && compareInput(message.getText())){
             String category = message.getText();
