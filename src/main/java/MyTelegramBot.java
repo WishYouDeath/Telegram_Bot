@@ -15,6 +15,10 @@ import java.util.function.Consumer;
 import static constant.Commands.*;
 import constant.DialogState;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class MyTelegramBot extends TelegramLongPollingBot {
     SendMessageOperationCreate sendMessageOperationCreate = new SendMessageOperationCreate();
     Map<String, Consumer<Message>> commandMap = new HashMap<>();
@@ -32,8 +36,27 @@ public class MyTelegramBot extends TelegramLongPollingBot {
         commandMap.put(GET, this::handleGetCommand);
     }
 
+    private final ScheduledExecutorService matchStatusChecker = Executors.newSingleThreadScheduledExecutor();
+    private final MatchNotificationManager matchNotificationManager = new MatchNotificationManager();
     MyTelegramBot() {
         addCommands();
+        startMatchStatusChecker();
+    }
+
+    private void startMatchStatusChecker() {
+        matchStatusChecker.scheduleAtFixedRate(this::checkMatchStatus, 0, 5, TimeUnit.MINUTES);
+    }
+
+    private void checkMatchStatus() {
+        matchNotificationManager.checkAndSendNotifications(this);
+    }
+
+    public void setMatchNotification(Long chatId, String teamName, NotificationType notificationType) {
+        matchNotificationManager.setMatchNotification(chatId, teamName, notificationType);
+    }
+
+    public void clearMatchNotification(Long chatId, String teamName) {
+        matchNotificationManager.clearMatchNotification(chatId, teamName);
     }
 
     @Override
