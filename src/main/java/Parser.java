@@ -15,7 +15,7 @@ public class Parser {
         return isTeamNameMatch(teamName, match.getHomeTeam(), match.getAwayTeam(), "ru") ||
                 isTeamNameMatch(teamName, match.getHomeTeam(), match.getAwayTeam(), "en");
     }
-    public int compareCategory(String category) {
+    private int compareCategory(String category) {
         switch (category.toLowerCase()) {
             case "футбол":
                 return 1;

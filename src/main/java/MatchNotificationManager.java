@@ -9,11 +9,14 @@ import static constant.NotificationType.*;
 
 public class MatchNotificationManager {
     private final Map<Long, Map<String, NotificationType>> matchNotifications = new HashMap<>();
+    private final MyTelegramBot bot;
 
-    public MatchNotificationManager() {
-        // Возможно, вам также нужно будет настроить дополнительные параметры в конструкторе
+
+    public MatchNotificationManager(MyTelegramBot bot) {
+        this.bot = bot;
         startNotificationScheduler();
     }
+
 
     public void setMatchNotification(Long chatId, String teamName, NotificationType notificationType) {
         matchNotifications
@@ -27,30 +30,30 @@ public class MatchNotificationManager {
                 .remove(teamName);
     }
 
-    public void checkAndSendNotifications(MyTelegramBot bot) {
-        // Здесь ваш код для проверки уведомлений и отправки сообщений
-        // Пример: iterateOverChatsAndSendNotifications(bot);
+    public void checkAndSendNotifications() {
+        iterateOverChatsAndSendNotifications();
     }
 
-    private void iterateOverChatsAndSendNotifications(MyTelegramBot bot) {
-        // Здесь ваш код для итерации по чатам и отправки уведомлений
-        // Пример: for (Map.Entry<Long, Map<String, NotificationType>> entry : matchNotifications.entrySet()) {
-        //              Long chatId = entry.getKey();
-        //              Map<String, NotificationType> teamNotifications = entry.getValue();
-        //              for (Map.Entry<String, NotificationType> teamEntry : teamNotifications.entrySet()) {
-        //                  String teamName = teamEntry.getKey();
-        //                  NotificationType notificationType = teamEntry.getValue();
-        //                  if (isTimeForNotification(teamName, notificationType)) {
-        //                      bot.sendNotification(chatId, teamName, notificationType);
-        //                  }
-        //              }
-        //         }
+    private void iterateOverChatsAndSendNotifications() {
+        for (Map.Entry<Long, Map<String, NotificationType>> entry : matchNotifications.entrySet()) {
+            Long chatId = entry.getKey();
+            Map<String, NotificationType> teamNotifications = entry.getValue();
+
+            for (Map.Entry<String, NotificationType> teamEntry : teamNotifications.entrySet()) {
+                String teamName = teamEntry.getKey();
+                NotificationType notificationType = teamEntry.getValue();
+
+                if (isTimeForNotification(teamName, notificationType)) {
+                    // Используйте метод sendNotification вашего бота
+                    bot.sendNotification(chatId, teamName, notificationType);
+                }
+            }
+        }
     }
 
     private boolean isTimeForNotification(String teamName, NotificationType notificationType) {
-        // Здесь ваш код для проверки времени уведомлений
-        // Пример: сравнение текущего времени с временем матча
-        return true;
+        // Реализуйте логику проверки времени уведомления
+        return true;  // Замените это условие на вашу логику
     }
 
     private void startNotificationScheduler() {
