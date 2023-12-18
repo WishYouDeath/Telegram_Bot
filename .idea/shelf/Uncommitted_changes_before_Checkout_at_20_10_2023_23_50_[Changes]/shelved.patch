@@ -1,0 +1,29 @@
+Index: src/main/java/Parser.java
+===================================================================
+diff --git a/src/main/java/Parser.java b/src/main/java/Parser.java
+--- a/src/main/java/Parser.java	
++++ b/src/main/java/Parser.java	
+@@ -8,7 +8,6 @@
+ import java.util.Calendar;
+ import java.util.Date;
+ 
+-//
+ /*
+ public class ApiRequest {
+     private static final String API_KEY = ;
+@@ -112,7 +111,6 @@
+ 
+                         if (isMatchFound(homeTeamName,awayTeamName,teamName) && (status.equalsIgnoreCase("finished"))) {
+                             matchFound = true;
+-
+                             System.out.println("Матч в лиге: '" + leagueName  + "' завершился");
+                             System.out.println(homeTeamName + '\t' + scoreHome + ":" + scoreAway + '\t' + awayTeamName);
+                             System.out.println("Матч был в это время: " + newStartTime);
+@@ -144,7 +142,6 @@
+             } catch (Exception e) {
+                 e.printStackTrace();
+             }
+-
+         }
+ }
+         
