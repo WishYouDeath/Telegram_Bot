@@ -147,4 +147,17 @@ public class Example {
     public void setSport(Sport sport) {
         this.sport = sport;
     }
+
+    @JsonProperty("chat_id")
+    private long chatId;
+
+    @JsonProperty("chat_id")
+    public long getChatId() {
+        return chatId;
+    }
+
+    @JsonProperty("chat_id")
+    public void setChatId(long chatId) {
+        this.chatId = chatId;
+    }
 }

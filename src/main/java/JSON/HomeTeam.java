@@ -16,6 +16,9 @@ public class HomeTeam {
     @JsonProperty("name_translations")
     private Map<String, String> nameTranslations;
 
+    public HomeTeam(String homeTeam, Object o) {
+    }
+
     @JsonProperty("name_translations")
     public Map<String, String> getNameTranslations() {
         return nameTranslations;
