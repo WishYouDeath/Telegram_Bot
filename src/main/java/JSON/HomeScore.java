@@ -11,6 +11,10 @@ import com.fasterxml.jackson.annotation.*;
 public class HomeScore{
     @JsonProperty("current")
     private Integer current;
+
+    public HomeScore(int i, Object o) {
+    }
+
     @JsonProperty("current")
     public Integer getCurrent() {
         return current;

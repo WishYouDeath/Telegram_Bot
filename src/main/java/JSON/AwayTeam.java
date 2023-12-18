@@ -16,6 +16,9 @@ public class AwayTeam{
     @JsonProperty("name_translations")
     private Map<String, String> nameTranslations;
 
+    public AwayTeam(String awayTeam, Object o) {
+    }
+
     @JsonProperty("name")
     public String getName() {
         return name;
