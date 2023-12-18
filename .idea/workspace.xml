@@ -4,22 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a55c86f-2766-4149-93d4-71bc17456d33" name="Changes" comment="workspace">
-      <change afterPath="$PROJECT_DIR$/src/main/java/GetNotificationTime.java" afterDir="false" />
+    <list default="true" id="9a55c86f-2766-4149-93d4-71bc17456d33" name="Changes" comment="Добавлены новые команды для уведомлений, 2-ой поток ещё не подключили">
+      <change afterPath="$PROJECT_DIR$/src/test/java/ButtonServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/APIRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/APIRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ButtonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ButtonService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/DateTimeUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/DateTimeUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GetNotificationTime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GetNotificationTime.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/MatchDataUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MatchDataUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/MatchNotificationManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MatchNotificationManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/MatchNotificationManager.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/MyTelegramBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MyTelegramBot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SendMessageOperationCreate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SendMessageOperationCreate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/constant/Commands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constant/Commands.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/constant/DialogState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constant/DialogState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/constant/NotificationType.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +44,9 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="2" />
@@ -94,13 +89,22 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="JUnit.ButtonServiceTest">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="openjdk-21 (2)" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Mine reprisitory" />
       <option name="PROGRAM_PARAMETERS" value="clean package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ButtonServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Mine reprisitory" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="ButtonServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -117,9 +121,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.ButtonServiceTest" />
         <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.ParserTest" />
-        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.Main" />
       </list>
@@ -236,7 +240,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701944471663</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Добавлены новые команды для уведомлений, 2-ой поток ещё не подключили">
+      <created>1702932781874</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1702932781874</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -263,7 +274,8 @@
     <MESSAGE value="Добавил команду выбора категории + функционал к ней" />
     <MESSAGE value="подготовил все к внедрению уведомлений" />
     <MESSAGE value="подготовил почти все к внедрению уведомлений" />
-    <option name="LAST_COMMIT_MESSAGE" value="подготовил почти все к внедрению уведомлений" />
+    <MESSAGE value="Добавлены новые команды для уведомлений, 2-ой поток ещё не подключили" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавлены новые команды для уведомлений, 2-ой поток ещё не подключили" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

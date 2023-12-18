@@ -8,6 +8,14 @@ import java.util.Map;
 
 public class GetNotificationTime {
     private static final Logger logger = LogManager.getLogger(Parser.class);
+    private Parser parsing;
+    public Parser getParsing() {
+        return parsing;
+    }
+
+    public void setParsing(Parser parsing) {
+        this.parsing = parsing;
+    }
     public static String getTimeForNotification(Message message, String teamName, Map<Long, String> userSelectedCategoryMap, Map<Long, String> userSelectedDateMap) {
         Parser parsing = new Parser();
         String selectedDate = userSelectedDateMap.get(message.getChatId());
@@ -24,13 +32,16 @@ public class GetNotificationTime {
                     String startTime = example.getStartAt();
                     DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                     LocalDateTime startDateTime = LocalDateTime.parse(startTime, inputFormatter);
-                    LocalDateTime adjustedDateTime = startDateTime.plusHours(5);
+                    System.out.println("Localtime = " +  startDateTime);
+                    LocalDateTime adjustedDateTime = startDateTime.plusHours(5);//5
                     LocalDateTime currentTime = LocalDateTime.now();
-                    LocalDateTime fiveMinutesLater = adjustedDateTime.plusMinutes(5);
+                    LocalDateTime fiveMinutesLater = adjustedDateTime.plusMinutes(5);//5
+                    System.out.println("Fivemin = " +  fiveMinutesLater);
                     if (fiveMinutesLater.isBefore(currentTime)) {
                         return MatchDataUtil.processMatchData(example, category);
                     }
                     else{
+                        System.out.println("Для");
                         return "Время матча не наступило";
                     }
                 } catch (Exception e) {
@@ -55,5 +66,4 @@ public class GetNotificationTime {
                 return "Неизвестный статус матча";
         }
     }
-
 }

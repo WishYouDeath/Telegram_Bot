@@ -9,8 +9,15 @@ import java.time.Clock;
 import java.time.LocalDate;
 
 public class Parser {
+    private Example match;
+    public Example getMatch() {
+        return match;
+    }
+
+    public void setMatch(Example match) {
+        this.match = match;
+    }
     private static final Logger logger = LogManager.getLogger(Parser.class);
-    public static Example match;
 
     private static boolean isTeamMatch(String teamName, Example match) {
         return isTeamNameMatch(teamName, match.getHomeTeam(), match.getAwayTeam(), "ru") ||
@@ -78,6 +85,7 @@ public class Parser {
                 match = objectMapper.treeToValue(matchNode, Example.class);
                 if (isTeamMatch(teamName, match)) {
                     matchInfoBuilder.append(MatchDataUtil.processMatchData(match, category));
+                    setMatch(match);
                     return matchInfoBuilder.toString();
                 }
             }

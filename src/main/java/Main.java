@@ -1,14 +1,17 @@
 import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(new MyTelegramBot());
-            // Создаем экземпляр класса TelegramNotificationSender
-//            new Thread(new TelegramNotificationSender(MyTelegramBot., apiBot, "Your notification message")).start();
+            MyTelegramBot bot = new MyTelegramBot();
+            botsApi.registerBot(bot);
+            bot.startNotificationThread(); //Запускаем 2ой поток
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
