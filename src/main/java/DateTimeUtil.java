@@ -1,11 +1,13 @@
 import JSON.Example;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateTimeUtil {
     private static final Logger logger = LogManager.getLogger(Parser.class);
+
     public static String getDate(Example example) {
         String startTime = example.getStartAt();
         try {

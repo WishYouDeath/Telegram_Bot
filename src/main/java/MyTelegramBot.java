@@ -5,28 +5,26 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.time.Clock;
-import java.time.LocalDate;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static constant.Commands.*;
-
 import constant.DialogState;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class MyTelegramBot extends TelegramLongPollingBot {
     SendMessageOperationCreate sendMessageOperationCreate = new SendMessageOperationCreate();
     Map<String, Consumer<Message>> commandMap = new HashMap<>();
-    Map<Long, String> userSelectedCategoryMap = new HashMap<>();
+    static Map<Long, String> userSelectedCategoryMap = new HashMap<>();
     Map<Long, String> userSelectedDateMap = new HashMap<>();
+    Map<Long, String> userSelectedTimeNotification = new HashMap<>();
+    Map<Long, String> userSelectedMatchNotification = new HashMap<>();
     private final DialogStateMachine dialogStateMachine = new DialogStateMachine();
+
+    Map<Long, String> matchNotificationMap = new HashMap<>();
 
     public void addCommands() {
         commandMap.put(CATEGORY, this::handleCategoryCommand);
@@ -34,32 +32,13 @@ public class MyTelegramBot extends TelegramLongPollingBot {
         commandMap.put(HELP, message -> executeMessage(sendMessageOperationCreate.createHelpInformation(message)));
         commandMap.put(ABOUT, message -> executeMessage(sendMessageOperationCreate.createBotInformation(message)));
         commandMap.put(AUTHORS, message -> executeMessage(sendMessageOperationCreate.createAuthorsInformation(message)));
-        commandMap.put(NOTIFICATION, this::handleGetNotificationCommand);
         commandMap.put(GET, this::handleGetCommand);
     }
 
-    private final ScheduledExecutorService matchStatusChecker = Executors.newSingleThreadScheduledExecutor();
-    private final MatchNotificationManager matchNotificationManager = new MatchNotificationManager(this);
 
     MyTelegramBot() {
         addCommands();
-        startMatchStatusChecker();
-    }
-
-    private void startMatchStatusChecker() {
-        matchStatusChecker.scheduleAtFixedRate(this::checkMatchStatus, 0, 5, TimeUnit.MINUTES);
-    }
-
-    private void checkMatchStatus() {
-        matchNotificationManager.checkAndSendNotifications();
-    }
-
-    /*public void setMatchNotification(Long chatId, String teamName, NotificationType notificationType) {
-        matchNotificationManager.setMatchNotification(chatId, teamName, notificationType);
-    }*/
-
-    public void clearMatchNotification(Long chatId, String teamName) {
-        matchNotificationManager.clearMatchNotification(chatId, teamName);
+        //startNotificationSender();
     }
 
     @Override
@@ -68,6 +47,11 @@ public class MyTelegramBot extends TelegramLongPollingBot {
             handleMessage(update.getMessage());
         }
     }
+//    private void startNotificationSender() {
+//        TelegramNotificationSender notificationSender = new TelegramNotificationSender(this, notificationMap);
+//        Thread senderThread = new Thread(notificationSender);
+//        senderThread.start();
+//    }
 
     private void handleMessage(Message message) {
         DialogState currentState = dialogStateMachine.getDialogState(message.getChatId());
@@ -81,7 +65,7 @@ public class MyTelegramBot extends TelegramLongPollingBot {
 
                 if (command.equals(GET)) {
                     dialogStateMachine.setDialogState(message.getChatId(), DialogState.WAITING_FOR_TEAM_NAME);
-                    executeMessage(sendMessageOperationCreate.createSimpleMessage(message,
+                    executeMessage(SendMessageOperationCreate.createSimpleMessage(message,
                             "Введите название одной команды, относящейся к выбранной категории спорта, и к выбранной дате"));
                 } else if (command.equals(CATEGORY)) {
                     dialogStateMachine.setDialogState(message.getChatId(), DialogState.CHOOSING_A_CATEGORY);
@@ -89,48 +73,130 @@ public class MyTelegramBot extends TelegramLongPollingBot {
                 } else if (command.equals(DATE)) {
                     dialogStateMachine.setDialogState(message.getChatId(), DialogState.SETTING_THE_DATE);
                     executeMessage(sendMessageOperationCreate.createChooseDateMessage(message));
+                }else if (command.equals(NOTIFICATION)) {
+                        dialogStateMachine.setDialogState(message.getChatId(), DialogState.SETTING_NOTIFICATION_TIME);
+                        executeMessage(sendMessageOperationCreate.setNotificationTime(message));
                 } else {
                     commandMap.getOrDefault(command, msg -> executeMessage(sendMessageOperationCreate.wrongCommand(message))).accept(message);
                 }
             }
         } else if (currentState == DialogState.WAITING_FOR_TEAM_NAME) {
             handleGetCommand(message);
+        } else if (currentState == DialogState.SETTING_NOTIFICATION_MATCH) {
+                handleSetNotificationMatch(message);
         } else if (currentState == DialogState.SETTING_THE_DATE) {
             handleDateCommand(message);
         } else if (currentState == DialogState.CHOOSING_A_CATEGORY) {
             handleCategoryCommand(message);
-        } else if (currentState == DialogState.SETTING_NOTIFICATION_MATCH) {
-            handleSetNotificationMatch(message);
+        } else if (currentState == DialogState.SETTING_NOTIFICATION_TIME) {
+            handleSetNotificationTime(message);
         }
     }
-
     private void handleGetNotificationCommand(Message message) {
         dialogStateMachine.setDialogState(message.getChatId(), DialogState.SETTING_NOTIFICATION_MATCH);
-        executeMessage(sendMessageOperationCreate.createSimpleMessage(message,
+        executeMessage(SendMessageOperationCreate.createSimpleMessage(message,
                 "Введите название команды, для которой хотите установить уведомление"));
     }
-
+    private void handleSetNotificationTime(Message message) {
+        if (message.hasText()) {
+            String time = message.getText();
+            executeMessage(SendMessageOperationCreate.createSimpleMessage(message,
+                    "Вы выбрали напоминание: " + time));
+            userSelectedTimeNotification.put(message.getChatId(), time);
+            handleGetNotificationCommand(message);
+        } else {
+            executeMessage(SendMessageOperationCreate.createSimpleMessage(message,
+                    "Пожалуйста, выберете когда хотите получить напоминание о матче"));
+        }
+    }
     private void handleSetNotificationMatch(Message message) {
         if (message.hasText()) {
-            String teamName = message.getText();
-            // можно костыльнуть сюда информацию о матче
-            executeMessage(sendMessageOperationCreate.createSimpleMessage(message,
-                    "Уведомление установлено для команды: " + teamName));
+            String team = message.getText();
+            executeMessage(SendMessageOperationCreate.createSimpleMessage(message,
+                    "Напоминание на команду " + team + " установлено"));
+            userSelectedMatchNotification.put(message.getChatId(), team);
             dialogStateMachine.clearDialogState(message.getChatId());
+            //Вызывать напоминание из него распарсить время и всё. Если матча нет то высказать это
+            String MatchInfo = GetNotificationTime.getTimeForNotification(message, team, userSelectedCategoryMap, userSelectedDateMap);
+            if (MatchInfo.equals("Такого матча сегодня нет")){
+                executeMessage(SendMessageOperationCreate.createSimpleMessage(message,
+                        "Такого матча сегодня нет, выберете другой матч для установки уведомления"));
+            }
+            else{
+                String time = GetNotificationTime.ParseDate(Parser.match, userSelectedCategoryMap, message);
+                switch (time){
+                    case("Матч уже начался!"):
+                        executeMessage(SendMessageOperationCreate.createSimpleMessage(message,
+                                "Матч уже начался!"));
+                        return;
+                    case("Матч был отложен"):
+                        executeMessage(SendMessageOperationCreate.createSimpleMessage(message,
+                                "Матч был отложен"));
+                        return;
+                    case("Неизвестный статус матча"):
+                        executeMessage(SendMessageOperationCreate.createSimpleMessage(message,
+                                "Неизвестный статус матча"));
+                        return;
+                    case("Время матча не наступило"):
+                       createAndStartSecondThread(message);
+                        return;
+                        //Если мы не в цикле значит матч уже должен начаться и нужно отправить оповещение
+                }
+                executeMessage(SendMessageOperationCreate.createSimpleMessage(message,
+                        time));
+            }
         } else {
-            executeMessage(sendMessageOperationCreate.createSimpleMessage(message,
-                    "Пожалуйста, введите название команды для установки уведомления"));
+            executeMessage(SendMessageOperationCreate.createSimpleMessage(message,
+                    "Пожалуйста, выберете команду для установки напоминания"));
         }
+    }
+    public static long calculateCheckingInterval(Message message) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime matchTime = GetNotificationTime.ParseDate(Parser.match, userSelectedCategoryMap, message);
+
+        long durationInSeconds = Duration.between(now, matchTime).toSeconds();
+
+        if (durationInSeconds < 0) {
+            // Время матча уже наступило
+            return 0;
+        }
+
+        long checkingInterval = durationInSeconds / 10; // Время между проверками (каждые 10 секунд)
+
+        return checkingInterval;
+    }
+    public void createAndStartSecondThread(Message message) {
+        Thread secondThread = new Thread(() -> {
+            long checkingInterval = calculateCheckingInterval(message);
+
+            while (true) {
+                try {
+                    Thread.sleep(checkingInterval * 1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                String currentMatchStatus = GetNotificationTime.ParseDate(Parser.match, userSelectedCategoryMap, message);
+
+                if (!currentMatchStatus.equals("Время матча не наступило")) {
+                    executeMessage(SendMessageOperationCreate.createSimpleMessage(message,
+                            "Матч начинается через 5 минут: " + currentMatchStatus));
+                    break;
+                }
+            }
+        });
+
+        secondThread.start();
     }
 
     private void handleCategoryCommand(Message message) {
         if (message.hasText() && compareInput(message.getText())) {
             String category = message.getText();
-            executeMessage(sendMessageOperationCreate.createSimpleMessage(message, "Вы установили категорию: " + category));
+            executeMessage(SendMessageOperationCreate.createSimpleMessage(message, "Вы установили категорию: " + category));
             userSelectedCategoryMap.put(message.getChatId(), category);
             dialogStateMachine.clearDialogState(message.getChatId());
         } else {
-            executeMessage(sendMessageOperationCreate.createSimpleMessage(message, "Неверная категория. Пожалуйста, выберите из предложенных вариантов."));
+            executeMessage(SendMessageOperationCreate.createSimpleMessage(message, "Неверная категория. Пожалуйста, выберите из предложенных вариантов."));
         }
     }
 
@@ -151,18 +217,18 @@ public class MyTelegramBot extends TelegramLongPollingBot {
                 LocalDate currentDate = LocalDate.now(Clock.systemUTC()).minusDays(1);
                 finalDate = currentDate.toString();
             }
-            executeMessage(sendMessageOperationCreate.createSimpleMessage(message, "Вы выбрали дату: " + finalDate));
+            executeMessage(SendMessageOperationCreate.createSimpleMessage(message, "Вы выбрали дату: " + finalDate));
             userSelectedDateMap.put(message.getChatId(), finalDate);
             dialogStateMachine.clearDialogState(message.getChatId());
         } else if (message.hasText() && message.getText().equalsIgnoreCase("Другая дата")) {
-            executeMessage(sendMessageOperationCreate.createSimpleMessage(message, "Выберете дату следуя образцу 2023-04-25"));
+            executeMessage(SendMessageOperationCreate.createSimpleMessage(message, "Выберете дату следуя образцу 2023-04-25"));
         } else if (message.hasText() && matchesDateOrNot(message.getText())) {
             String date = message.getText();
-            executeMessage(sendMessageOperationCreate.createSimpleMessage(message, "Вы выбрали дату: " + date));
+            executeMessage(SendMessageOperationCreate.createSimpleMessage(message, "Вы выбрали дату: " + date));
             userSelectedDateMap.put(message.getChatId(), date);
             dialogStateMachine.clearDialogState(message.getChatId());
         } else {
-            executeMessage(sendMessageOperationCreate.createSimpleMessage(message, "Неверный формат даты. Пожалуйста, выберите из предложенных вариантов или отформатируйте вашу дату согласно образцу"));
+            executeMessage(SendMessageOperationCreate.createSimpleMessage(message, "Неверный формат даты. Пожалуйста, выберите из предложенных вариантов или отформатируйте вашу дату согласно образцу"));
         }
     }
 
@@ -172,7 +238,7 @@ public class MyTelegramBot extends TelegramLongPollingBot {
             executeMessage(sendMessageOperationCreate.getTimeTable(message, teamName, userSelectedCategoryMap, userSelectedDateMap));
             dialogStateMachine.clearDialogState(message.getChatId());
         } else {
-            executeMessage(sendMessageOperationCreate.createSimpleMessage(message, "Пожалуйста, введите название команды (teamName):"));
+            executeMessage(SendMessageOperationCreate.createSimpleMessage(message, "Пожалуйста, введите название команды (teamName):"));
         }
     }
 

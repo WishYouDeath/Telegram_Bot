@@ -1,12 +1,13 @@
 import JSON.*;
+
 import java.util.HashMap;
 import java.util.Map;
+
 public class MatchDataUtil {
     public static String processMatchData(Example example, String category) {
         Map<String, String> periodMap = initializePeriodMap();
         StringBuilder matchInfoBuilder = new StringBuilder();
 
-        // Получение информации о матче
         HomeTeam homeTeam = example.getHomeTeam();
         AwayTeam awayTeam = example.getAwayTeam();
         String nameHomeTeam = getTranslatedHomeName(homeTeam);
@@ -26,19 +27,19 @@ public class MatchDataUtil {
 
         switch (status.toLowerCase()) {
             case "finished":
-                matchInfoBuilder.append(String.format("Выбранная категория:"+ category + "\nМатч в лиге: '%s' завершился\n%s\t%d:%d\t%s\nМатч был %s",
+                matchInfoBuilder.append(String.format("Выбранная категория:" + category + "\nМатч в лиге: '%s' завершился\n%s\t%d:%d\t%s\nМатч был %s",
                         nameLeague, nameHomeTeam, currentHomeScore, currentAwayScore, nameAwayTeam, formattedStartTime));
                 break;
             case "notstarted":
-                matchInfoBuilder.append(String.format("Выбранная категория:"+ category + "\nМатч в лиге: '%s' ещё не начался\nМатч '%s : %s' будет в это время: %s\n",
+                matchInfoBuilder.append(String.format("Выбранная категория:" + category + "\nМатч в лиге: '%s' ещё не начался\nМатч '%s : %s' будет в это время: %s\n",
                         nameLeague, nameHomeTeam, nameAwayTeam, formattedStartTime));
                 break;
             case "inprogress":
-                matchInfoBuilder.append(String.format("Выбранная категория:"+ category + "\nМатч %s : %s в лиге: '%s' уже начался\nСейчас в матче %s\nТекущий счёт %d:%d",
+                matchInfoBuilder.append(String.format("Выбранная категория:" + category + "\nМатч %s : %s в лиге: '%s' уже начался\nСейчас в матче %s\nТекущий счёт %d:%d",
                         nameHomeTeam, nameAwayTeam, nameLeague, currentPeriod, currentHomeScore, currentAwayScore));
                 break;
             case "postponed":
-                matchInfoBuilder.append(String.format("Выбранная категория:"+ category + "\nМатч между %s и %s в лиге: '%s' был отложен\n", nameHomeTeam, nameAwayTeam, nameLeague));
+                matchInfoBuilder.append(String.format("Выбранная категория:" + category + "\nМатч между %s и %s в лиге: '%s' был отложен\n", nameHomeTeam, nameAwayTeam, nameLeague));
                 break;
             default:
                 matchInfoBuilder.append("Неизвестный статус матча");
@@ -65,7 +66,9 @@ public class MatchDataUtil {
             }
         }
         return team.getName();
-    }private static String getTranslatedAwayName(AwayTeam team) {
+    }
+
+    private static String getTranslatedAwayName(AwayTeam team) {
         if (team.getNameTranslations() != null) {
             if (team.getNameTranslations().containsKey("ru")) {
                 return team.getNameTranslations().get("ru");
