@@ -17,9 +17,6 @@ public class League{
     @JsonProperty("name_translations")
     private Map<String, String> nameTranslations;
 
-    public League(String league, Object o) {
-    }
-
     @JsonProperty("name")
     public String getName() {
         return name;

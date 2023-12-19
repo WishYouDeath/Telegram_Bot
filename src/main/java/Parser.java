@@ -9,13 +9,18 @@ import java.time.Clock;
 import java.time.LocalDate;
 
 public class Parser {
-    private Example match;
-    public Example getMatch() {
-        return match;
+    private Example example;
+
+    public Parser() {
+        example = new Example();
     }
 
-    public void setMatch(Example match) {
-        this.match = match;
+    public Example getExample() {
+        return example;
+    }
+
+    public void setExample(Example example) {
+        this.example = example;
     }
     private static final Logger logger = LogManager.getLogger(Parser.class);
 
@@ -82,10 +87,10 @@ public class Parser {
             JsonNode rootNode = objectMapper.readTree(responseBody);
             JsonNode matchesNode = rootNode.get("data");
             for (JsonNode matchNode : matchesNode) {
-                match = objectMapper.treeToValue(matchNode, Example.class);
-                if (isTeamMatch(teamName, match)) {
-                    matchInfoBuilder.append(MatchDataUtil.processMatchData(match, category));
-                    setMatch(match);
+                example = objectMapper.treeToValue(matchNode, Example.class);
+                if (isTeamMatch(teamName, example)) {
+                    matchInfoBuilder.append(MatchDataUtil.processMatchData(example, category));
+                    setExample(example);
                     return matchInfoBuilder.toString();
                 }
             }

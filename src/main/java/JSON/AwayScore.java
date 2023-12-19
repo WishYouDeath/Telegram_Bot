@@ -12,9 +12,6 @@ public class AwayScore{
     @JsonProperty("current")
     private Integer current;
 
-    public AwayScore(int i, Object o) {
-    }
-
     @JsonProperty("current")
     public Integer getCurrent() {
         return current;

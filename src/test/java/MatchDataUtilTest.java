@@ -1,42 +1,83 @@
-import JSON.AwayTeam;
-import JSON.HomeTeam;
-import JSON.League;
-import JSON.HomeScore;
-import JSON.AwayScore;
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
-import JSON.Example;
+import JSON.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class MatchDataUtilTest {
+
     @Test
     public void testProcessMatchDataFinished() {
-        Example example = mock(Example.class);
-        when(example.getHomeTeam()).thenReturn(new HomeTeam("Home Team", null));
-        when(example.getAwayTeam()).thenReturn(new AwayTeam("Away Team", null));
-        when(example.getLeague()).thenReturn(new League("League", null));
-        when(example.getHomeScore()).thenReturn(new HomeScore(2, null));
-        when(example.getAwayScore()).thenReturn(new AwayScore(1, null));
-        when(example.getStatus()).thenReturn("finished");
-        when(example.getStatusMore()).thenReturn("2nd half");
-        when(DateTimeUtil.getDate(example)).thenReturn("2023-01-01 12:00:00");
+        Example example = new Example();
+        example.setStatus("finished");
+        example.setHomeTeam(new HomeTeam("Home Team"));
+        example.setAwayTeam(new AwayTeam("Away Team"));
+        example.setLeague(new League("League"));
+        example.setName(new HomeScore(2));
+        example.setAwayScore(new AwayScore(1));
+        String category = "Category";
 
-        String result = MatchDataUtil.processMatchData(example, "TestCategory");
+        String expected = "Выбранная категория:" + category + "\nМатч в лиге: 'League' завершился\nHome Team\t2:1\tAway Team\nМатч был Н/Д";
+        String result = MatchDataUtil.processMatchData(example, category);
 
-        assertEquals("Выбранная категория:TestCategory\nМатч в лиге: 'League' завершился\nHome Team\t2:1\tAway Team\nМатч был второй период", result);
+        assertEquals(expected, result);
     }
 
     @Test
     public void testProcessMatchDataNotStarted() {
-        // Mocking the Example object
-        Example example = mock(Example.class);
-        when(example.getHomeTeam()).thenReturn(new HomeTeam("Home Team", null));
-        when(example.getAwayTeam()).thenReturn(new AwayTeam("Away Team", null));
-        when(example.getLeague()).thenReturn(new League("League", null));
-        when(example.getStatus()).thenReturn("notstarted");
-        when(DateTimeUtil.getDate(example)).thenReturn("2023-01-01 12:00:00");
+        Example example = new Example();
+        example.setStatus("notstarted");
+        example.setHomeTeam(new HomeTeam("Home Team"));
+        example.setAwayTeam(new AwayTeam("Away Team"));
+        example.setLeague(new League("League"));
+        String category = "Category";
 
-        String result = MatchDataUtil.processMatchData(example, "TestCategory");
+        String expected = "Выбранная категория:" + category + "\nМатч в лиге: 'League' ещё не начался\nМатч 'Home Team : Away Team' будет в это время: Н/Д\n";
+        String result = MatchDataUtil.processMatchData(example, category);
 
-        assertEquals("Выбранная категория:TestCategory\nМатч в лиге: 'League' ещё не начался\nМатч 'Home Team : Away Team' будет в это время: 2023-01-01 12:00:00\n", result);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testProcessMatchDataInProgress() {
+        Example example = new Example();
+        example.setStatus("inprogress");
+        example.setHomeTeam(new HomeTeam("Home Team"));
+        example.setAwayTeam(new AwayTeam("Away Team"));
+        example.setLeague(new League("League"));
+        example.setStatusMore("1st half");
+        example.setHomeScore(new Score(1));
+        example.setAwayScore(new Score(0));
+        String category = "Category";
+
+        String expected = "Выбранная категория:" + category + "\nМатч Home Team : Away Team в лиге: 'League' уже начался\nСейчас в матче первый период\nТекущий счёт 1:0";
+        String result = MatchDataUtil.processMatchData(example, category);
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testProcessMatchDataPostponed() {
+        Example example = new Example();
+        example.setStatus("postponed");
+        example.setHomeTeam(new HomeTeam("Home Team"));
+        example.setAwayTeam(new AwayTeam("Away Team"));
+        example.setLeague(new League("League"));
+        String category = "Category";
+
+        String expected = "Выбранная категория:" + category + "\nМатч между Home Team и Away Team в лиге: 'League' был отложен\n";
+        String result = MatchDataUtil.processMatchData(example, category);
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void testProcessMatchDataUnknownStatus() {
+        Example example = new Example();
+        example.setStatus("unknown");
+        String category = "Category";
+
+        String expected = "Неизвестный статус матча";
+        String result = MatchDataUtil.processMatchData(example, category);
+
+        assertEquals(expected, result);
     }
 }

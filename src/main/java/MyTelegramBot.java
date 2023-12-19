@@ -26,6 +26,10 @@ public class MyTelegramBot extends TelegramLongPollingBot {
     private final DialogStateMachine dialogStateMachine = new DialogStateMachine();
     private final Map<Message, String> matchNotificationMap = new HashMap<>();
 
+    GetNotificationTime notificationTime = new GetNotificationTime();
+    Parser exampleClass = new Parser();
+    Example match = exampleClass.getExample();
+
     public void addCommands() {
         commandMap.put(CATEGORY, this::handleCategoryCommand);
         commandMap.put(START, message -> executeMessage(sendMessageOperationCreate.createGreetingInformation(message)));
@@ -115,17 +119,13 @@ public class MyTelegramBot extends TelegramLongPollingBot {
             userSelectedMatchNotification.put(message.getChatId(), team);
             dialogStateMachine.clearDialogState(message.getChatId());
             //Вызывать напоминание из него распарсить время и всё. Если матча нет то высказать это
-            Parser parser = new Parser();
-            Example match = parser.getMatch();
-            String MatchInfo = GetNotificationTime.getTimeForNotification(message, team, userSelectedCategoryMap, userSelectedDateMap);
-            System.out.println(MatchInfo);
+            String MatchInfo = notificationTime.getTimeForNotification(message, team, userSelectedCategoryMap, userSelectedDateMap);
             if (MatchInfo.equals("Такого матча сегодня нет")){
                 executeMessage(SendMessageOperationCreate.createSimpleMessage(message,
                         "Такого матча сегодня нет, выберете другой матч для установки уведомления"));
             }
             else{
-                System.out.println(match);
-                String time = GetNotificationTime.ParseDate(match, userSelectedCategoryMap, message);
+                String time = notificationTime.ParseDate(match, userSelectedCategoryMap, message);
                 executeMessage(SendMessageOperationCreate.createSimpleMessage(message,
                         "Напоминание на команду " + team + " установлено"));
                 switch (time){
@@ -160,8 +160,6 @@ public class MyTelegramBot extends TelegramLongPollingBot {
             while (true) {
                 for (Map.Entry<Message, String> entry : matchNotificationMap.entrySet()) {
                     Message message = entry.getKey();
-                    Parser parser = new Parser();
-                    Example match = parser.getMatch();
                     matchNotificationMap.computeIfPresent(message, (k, v) -> {
                         String info = GetNotificationTime.ParseDate(match, userSelectedCategoryMap, message);
                         System.out.println(info);
