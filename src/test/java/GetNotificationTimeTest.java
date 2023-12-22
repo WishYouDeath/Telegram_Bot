@@ -12,7 +12,7 @@ public class GetNotificationTimeTest {
     public void testParseDateFinished() {
         Example example = mock(Example.class);
         when(example.getStatus()).thenReturn("finished");
-        when(example.getChatId()).thenReturn(123L);
+        //when(example.getChatId()).thenReturn(123L);
         when(example.getStatus()).thenReturn("finished");
         when(example.getStatusMore()).thenReturn("2nd half");
         when(DateTimeUtil.getDate(example)).thenReturn("2023-01-01 12:00:00");
@@ -32,7 +32,7 @@ public class GetNotificationTimeTest {
         Example example = mock(Example.class);
         when(example.getStatus()).thenReturn("notstarted");
         when(example.getStartAt()).thenReturn("2023-01-01 12:00:00");
-        when(example.getChatId()).thenReturn(123L);
+        //when(example.getChatId()).thenReturn(123L);
         when(example.getStatusMore()).thenReturn("1st half");
         when(DateTimeUtil.getDate(example)).thenReturn("2023-01-01 12:00:00");
 

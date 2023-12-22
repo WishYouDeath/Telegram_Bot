@@ -5,11 +5,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
-
 public class GetNotificationTime {
     private static final Logger logger = LogManager.getLogger(Parser.class);
     private Parser parsing;
-
     public GetNotificationTime() {
         parsing = new Parser();
     }
@@ -24,7 +22,7 @@ public class GetNotificationTime {
     public String getTimeForNotification(Message message, String teamName, Map<Long, String> userSelectedCategoryMap, Map<Long, String> userSelectedDateMap) {
         String selectedDate = userSelectedDateMap.get(message.getChatId());
         String category = userSelectedCategoryMap.get(message.getChatId());
-        return (parsing.receiveData(teamName, category, selectedDate));
+        return (parsing.receiveData(teamName, category, selectedDate, Parser.getExample()));
     }
 
     private static String getDate(Example example, String status, String category) {

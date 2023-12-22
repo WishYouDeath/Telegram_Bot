@@ -5,7 +5,6 @@ import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.Message;
-
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -24,11 +23,7 @@ public class MyTelegramBot extends TelegramLongPollingBot {
     Map<Long, String> userSelectedTimeNotification = new HashMap<>();
     Map<Long, String> userSelectedMatchNotification = new HashMap<>();
     private final DialogStateMachine dialogStateMachine = new DialogStateMachine();
-    private final Map<Message, String> matchNotificationMap = new HashMap<>();
-
-    GetNotificationTime notificationTime = new GetNotificationTime();
-    Parser exampleClass = new Parser();
-    Example match = exampleClass.getExample();
+    private final Map<Example, Message> matchNotificationMap = new HashMap<>();
 
     public void addCommands() {
         commandMap.put(CATEGORY, this::handleCategoryCommand);
@@ -113,19 +108,39 @@ public class MyTelegramBot extends TelegramLongPollingBot {
                     "Пожалуйста, выберете когда хотите получить напоминание о матче"));
         }
     }
+    public Example copyExample(Example e1) {
+        Example copy = new Example();
+        copy.setName(e1.getName());
+        copy.setStatus(e1.getStatus());
+        copy.setStatusMore(e1.getStatusMore());
+        copy.setHomeTeam(e1.getHomeTeam());
+        copy.setAwayTeam(e1.getAwayTeam());
+        copy.setStartAt(e1.getStartAt());
+        copy.setHomeScore(e1.getHomeScore());
+        copy.setAwayScore(e1.getAwayScore());
+        copy.setLeague(e1.getLeague());
+        copy.setSport(e1.getSport());
+        copy.setNameTranslations(e1.getNameTranslations());
+        return copy;
+    }
     private void handleSetNotificationMatch(Message message) {
         if (message.hasText()) {
             String team = message.getText();
             userSelectedMatchNotification.put(message.getChatId(), team);
             dialogStateMachine.clearDialogState(message.getChatId());
             //Вызывать напоминание из него распарсить время и всё. Если матча нет то высказать это
+
+            GetNotificationTime notificationTime = new GetNotificationTime();
             String MatchInfo = notificationTime.getTimeForNotification(message, team, userSelectedCategoryMap, userSelectedDateMap);
+            Example originalExample = Parser.getExample();
+            Example match = copyExample(originalExample);
+            System.out.println("match" + match);
             if (MatchInfo.equals("Такого матча сегодня нет")){
                 executeMessage(SendMessageOperationCreate.createSimpleMessage(message,
                         "Такого матча сегодня нет, выберете другой матч для установки уведомления"));
             }
             else{
-                String time = notificationTime.ParseDate(match, userSelectedCategoryMap, message);
+                String time = GetNotificationTime.ParseDate(match, userSelectedCategoryMap, message);
                 executeMessage(SendMessageOperationCreate.createSimpleMessage(message,
                         "Напоминание на команду " + team + " установлено"));
                 switch (time){
@@ -143,7 +158,7 @@ public class MyTelegramBot extends TelegramLongPollingBot {
                         return;
                     case("Время матча не наступило"):
                         // Add the chatId and message to the matchNotificationMap
-                        matchNotificationMap.put(message,MatchInfo);
+                        matchNotificationMap.put(match,message);
                         return;
                         //Если мы не в цикле значит матч уже должен начаться и нужно отправить оповещение
                 }
@@ -158,13 +173,15 @@ public class MyTelegramBot extends TelegramLongPollingBot {
     public void startNotificationThread() {
         new Thread(() -> {
             while (true) {
-                for (Map.Entry<Message, String> entry : matchNotificationMap.entrySet()) {
-                    Message message = entry.getKey();
+                for (Map.Entry<Example, Message> entry : matchNotificationMap.entrySet()) {
+                    Example message = entry.getKey();
+                    Message chat = entry.getValue();
+
                     matchNotificationMap.computeIfPresent(message, (k, v) -> {
-                        String info = GetNotificationTime.ParseDate(match, userSelectedCategoryMap, message);
+                        String info = GetNotificationTime.ParseDate(message, userSelectedCategoryMap, chat);
                         System.out.println(info);
                         if (!info.equals("Время матча не наступило")) {
-                            executeMessage(SendMessageOperationCreate.createSimpleMessage(message, info));
+                            executeMessage(SendMessageOperationCreate.createSimpleMessage(chat, info));
                             return null;
                         }
                         return v;

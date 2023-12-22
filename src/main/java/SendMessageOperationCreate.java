@@ -70,7 +70,7 @@ public class SendMessageOperationCreate {
         Parser parsing = new Parser();
         String selectedDate = userSelectedDateMap.get(message.getChatId());
         String category = userSelectedCategoryMap.get(message.getChatId());
-        String timetable = parsing.receiveData(teamName, category, selectedDate);
+        String timetable = parsing.receiveData(teamName, category, selectedDate, Parser.getExample());
         return createSimpleMessage(message, timetable);
     }
 

@@ -5,17 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a55c86f-2766-4149-93d4-71bc17456d33" name="Changes" comment="Сделал тест на клаву, подключил 2ой поток, ошибка в парсере даты, надо подправить получение example">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_12_2023_13_14_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_12_2023_13_14_[Changes]1/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_12_2023_13_14__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_12_2023_13_14__Changes_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_10_2023_23_50__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_10_2023_23_50__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GetNotificationTime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GetNotificationTime.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/JSON/AwayScore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/JSON/AwayScore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/JSON/AwayTeam.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/JSON/AwayTeam.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/JSON/Example.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/JSON/Example.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/JSON/HomeScore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/JSON/HomeScore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/JSON/HomeTeam.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/JSON/HomeTeam.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/JSON/League.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/JSON/League.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/MyTelegramBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/MyTelegramBot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/MatchDataUtilTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/MatchDataUtilTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SendMessageOperationCreate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SendMessageOperationCreate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/GetNotificationTimeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/GetNotificationTimeTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +73,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Keyboard&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Notifications-and-Tests&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Yona/Desktop/Mine reprisitory&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
@@ -98,8 +100,17 @@
       <option name="ALTERNATIVE_JRE_PATH" value="openjdk-21 (2)" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="Main" />
-      <module name="Mine reprisitory" />
+      <module name="TelegramBot" />
       <option name="PROGRAM_PARAMETERS" value="clean package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ButtonServiceTest (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="TelegramBot" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="ButtonServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -131,23 +142,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ParserTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="TelegramBot" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="ParserTest" />
-      <option name="METHOD_NAME" value="" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.ButtonServiceTest (1)" />
         <item itemvalue="JUnit.GetNotificationTimeTest" />
         <item itemvalue="JUnit.MatchDataUtilTest" />
         <item itemvalue="JUnit.ButtonServiceTest" />
-        <item itemvalue="JUnit.ParserTest" />
       </list>
     </recent_temporary>
   </component>

@@ -9,18 +9,12 @@ import java.time.Clock;
 import java.time.LocalDate;
 
 public class Parser {
-    private Example example;
-
+    private static Example example;//
     public Parser() {
         example = new Example();
     }
-
-    public Example getExample() {
+    public static Example getExample() {
         return example;
-    }
-
-    public void setExample(Example example) {
-        this.example = example;
     }
     private static final Logger logger = LogManager.getLogger(Parser.class);
 
@@ -59,7 +53,7 @@ public class Parser {
         return false;
     }
 
-    public String receiveData(String teamName, String category, String date) {
+    public String receiveData(String teamName, String category, String date, Example example) {
         LocalDate currentDate = LocalDate.now(Clock.systemUTC());
         if (category == null || date == null) {
             category = category == null ? "Футбол" : category;
@@ -90,7 +84,8 @@ public class Parser {
                 example = objectMapper.treeToValue(matchNode, Example.class);
                 if (isTeamMatch(teamName, example)) {
                     matchInfoBuilder.append(MatchDataUtil.processMatchData(example, category));
-                    setExample(example);
+                    System.out.println(example + "в парасере");
+                    //setExample(example);
                     return matchInfoBuilder.toString();
                 }
             }

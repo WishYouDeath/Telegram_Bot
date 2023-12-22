@@ -148,4 +148,18 @@ public class Example {
         this.sport = sport;
     }
 
+    public Example copyExample(Example e1){
+        this.name = e1.getName();
+        this.status = e1.getStatus();
+        this.statusMore = e1.getStatusMore();
+        this.homeTeam = e1.getHomeTeam();
+        this.awayTeam = e1.getAwayTeam();
+        this.startAt = e1.getStartAt();
+        this.homeScore = e1.getHomeScore();
+        this.awayScore = e1.getAwayScore();
+        this.league = e1.getLeague();
+        this.sport = e1.getSport();
+        this.nameTranslations = e1.getNameTranslations();
+        return e1;
+    }
 }
